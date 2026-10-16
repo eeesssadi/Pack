@@ -1,1 +1,106 @@
 
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notre Boutique | Maroc</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f5ee;
+      color: #24352c;
+    }
+
+    header {
+      padding: 24px 16px;
+      text-align: center;
+      background: #244c3a;
+      color: white;
+    }
+
+    header h1 { margin: 0 0 8px; }
+    header p { margin: 0; }
+
+    .intro {
+      text-align: center;
+      padding: 36px 18px;
+    }
+
+    .intro h2 { font-size: 28px; }
+    .intro p { line-height: 1.6; }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      padding: 18px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .product {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+      box-shadow: 0 3px 12px #0000000d;
+    }
+
+    .emoji { font-size: 48px; }
+    .product h3 { margin-bottom: 8px; }
+    .price { font-weight: bold; color: #244c3a; }
+
+    footer {
+      text-align: center;
+      padding: 26px 12px;
+      margin-top: 24px;
+      background: #e9e7dd;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Notre Boutique</h1>
+    <p>Des idées pratiques pour votre maison</p>
+  </header>
+
+  <section class="intro">
+    <h2>Bienvenue !</h2>
+    <p>Découvrez bientôt notre sélection d’accessoires pratiques pour la cuisine et la maison au Maroc.</p>
+  </section>
+
+  <section class="products">
+    <article class="product">
+      <div class="emoji">🍳</div>
+      <h3>Accessoires de cuisine</h3>
+      <p>Des idées utiles pour faciliter votre quotidien.</p>
+      <p class="price">Prix à confirmer</p>
+    </article>
+
+    <article class="product">
+      <div class="emoji">🏠</div>
+      <h3>Organisation de la maison</h3>
+      <p>Des solutions pratiques pour gagner de la place.</p>
+      <p class="price">Prix à confirmer</p>
+    </article>
+
+    <article class="product">
+      <div class="emoji">🧺</div>
+      <h3>Rangement malin</h3>
+      <p>Une maison mieux organisée, simplement.</p>
+      <p class="price">Bientôt disponible</p>
+    </article>
+  </section>
+
+  <footer>
+    <p>Mohammedia · Casablanca · Maroc</p>
+    <p>Notre Boutique — Ouverture prochaine</p>
+  </footer>
+</body>
+</html>
