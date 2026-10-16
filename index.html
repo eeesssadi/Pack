@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pack Boutique – Plus vous prenez, moins vous payez</title>
+<title>Pack.ma – Packs cuisine, voiture, maman et sport au Maroc</title>
+<meta name="description" content="Pack.ma, boutique de packs au Maroc : cuisine, voiture, maman, sport. Plus vous prenez de produits, plus la remise grimpe jusqu’à 30 %. Livraison partout au Maroc, paiement à la livraison.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
@@ -19,31 +20,35 @@ button{font:inherit;cursor:pointer;color:inherit}
 .top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;
   padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top,0));
   background:#ffffffee;backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.brand{font-weight:800;font-size:19px;letter-spacing:-.2px;flex:1}
+.brand{font-weight:800;font-size:20px;letter-spacing:-.2px;flex:1}
 .back{background:var(--tint);border:0;border-radius:50%;width:38px;height:38px;font-size:18px}
 .call{background:var(--acc);color:#fff;font-weight:700;text-decoration:none;
   padding:9px 14px;border-radius:999px;font-size:14px}
 
 main{max-width:980px;margin:0 auto;padding:0 16px}
 
-.hero{padding:34px 0 8px}
+.hero{padding:30px 0 4px}
 .hero h1{font-size:clamp(30px,8.5vw,50px);font-weight:800;line-height:1.1;max-width:18ch;letter-spacing:-.5px}
-.hero p{margin-top:14px;font-size:17px;color:var(--muted);max-width:42ch}
-.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:24px 0 8px}
-.tier{border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;background:#fff}
-.tier b{display:block;font-size:21px;color:var(--acc);font-weight:800}
-.tier span{font-size:12px;color:var(--muted)}
-.ex{font-size:13.5px;color:var(--muted);margin-bottom:6px}
-h2.sec{font-size:22px;font-weight:800;margin:26px 0 14px;letter-spacing:-.2px}
-.packs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-@media(min-width:700px){.packs{grid-template-columns:repeat(4,1fr);gap:16px}}
-.tile{border:1px solid var(--line);border-radius:18px;padding:20px 14px 16px;text-align:left;color:var(--ink);
-  display:flex;flex-direction:column;gap:6px;min-height:190px}
-.tile .em{font-size:42px}
-.tile h3{font-size:18px;font-weight:800;margin-top:auto}
+.hero p{margin-top:12px;font-size:16.5px;color:var(--muted);max-width:44ch}
+
+.home{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start;margin-top:22px}
+@media(min-width:700px){.home{grid-template-columns:210px 1fr;gap:26px}}
+.stairs{position:sticky;top:76px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 10px}
+.stairs h2{font-size:14px;font-weight:800;line-height:1.25;margin-bottom:10px}
+.st{border-radius:9px;padding:7px 8px;margin-bottom:6px;color:#fff;background:var(--acc);line-height:1.15}
+.st:last-of-type{margin-bottom:0}
+.st b{display:block;font-size:18px;font-weight:800}
+.st span{font-size:11px;opacity:.92}
+.stairs p{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.35}
+
+.list{display:grid;gap:14px}
+.tile{border:1px solid var(--line);border-radius:18px;padding:18px 16px 16px;text-align:left;color:var(--ink);
+  display:flex;flex-direction:column;gap:4px}
+.tile .em{font-size:40px}
+.tile h3{font-size:19px;font-weight:800;margin-top:4px}
 .tile small{font-size:13px;color:var(--muted)}
-.tile .go{margin-top:6px;align-self:flex-start;background:var(--k);color:#fff;
-  font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px}
+.tile .go{margin-top:10px;align-self:flex-start;background:var(--k);color:#fff;
+  font-weight:700;font-size:13.5px;padding:8px 14px;border-radius:999px}
 
 .phead{padding:26px 0 6px}
 .phead .em{font-size:44px}
@@ -60,4 +65,101 @@ h2.sec{font-size:22px;font-weight:800;margin:26px 0 14px;letter-spacing:-.2px}
 @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:16px}}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
 .card.in{border:1.5px solid var(--acc)}
-.pic{background:var(--tint);text-align:center;font-size:52px;padding:20px 0 16px;pos
+.pic{background:var(--tint);text-align:center;font-size:52px;padding:20px 0 16px;position:relative}
+.badge{position:absolute;top:8px;right:8px;background:var(--acc);color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px}
+.inf{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.inf h3{font-size:15.5px;font-weight:700;line-height:1.25}
+.inf p{font-size:13px;color:var(--muted);flex:1}
+.pr{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pr .new{font-size:21px;font-weight:800}
+.pr .new small{font-size:13px;font-weight:700}
+.pr .old{font-size:14px;color:#8a93a0;text-decoration:line-through}
+.add{border:0;border-radius:10px;padding:12px;font-weight:700;font-size:14.5px;background:var(--acc);color:#fff}
+.card.in .add{background:#fff;color:var(--acc);border:1.5px solid var(--acc)}
+.cmd{border:1.5px solid var(--line);border-radius:10px;padding:11px;font-weight:700;font-size:14.5px;background:#fff;color:var(--ink)}
+
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;
+  background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 16px #0000000f;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0))}
+#bar.show{display:block}
+.bi{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.bl{flex:1;font-size:13.5px;color:var(--muted)}
+.bl b{display:block;font-size:20px;color:var(--ink);font-weight:800}
+.bl em{color:var(--acc);font-style:normal;font-weight:800}
+.bo{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:14px 18px;font-weight:700;font-size:15.5px}
+
+footer{max-width:980px;margin:34px auto 0;padding:0 16px;color:var(--muted);font-size:14px;text-align:center}
+footer a{color:var(--acc);font-weight:700}
+
+.liv{margin-top:30px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+.liv h2{font-size:20px;margin-bottom:10px}
+.liv ul{list-style:none;padding:0;display:grid;gap:8px;font-size:15px}
+.liv b{color:var(--acc)}
+
+#overlay{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:50}
+#overlay.open{display:flex}
+.sheet{background:#fff;color:var(--ink);width:100%;max-width:540px;border-radius:22px 22px 0 0;
+  padding:20px 18px calc(22px + env(safe-area-inset-bottom,0));max-height:94vh;overflow-y:auto}
+@media(prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(40px);opacity:.4}}}
+.sh{display:flex;justify-content:space-between;align-items:center}
+.sh h2{font-size:22px;font-weight:800}
+.x{background:var(--tint);border:0;border-radius:50%;width:38px;height:38px;font-size:18px;color:var(--ink)}
+.lines{margin:14px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ln{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;font-size:14.5px;border-bottom:1px solid var(--tint)}
+.ln:last-child{border-bottom:0}
+.ln s{color:#8a96a0;margin-right:6px;font-size:13px}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 5px}
+input,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid #cfd8de;border-radius:10px;color:var(--ink);background:#fff}
+input:focus,textarea:focus{border-color:var(--acc)}
+.tot{margin:16px 0 4px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:4px;font-size:15px}
+.tot div{display:flex;justify-content:space-between}
+.tot .save{color:#1a8a3c;font-weight:700}
+.tot .big{font-size:22px;font-weight:800}
+.err{color:#b3261e;font-size:14px;font-weight:700;margin-top:10px;min-height:20px}
+.send{width:100%;background:#25a244;color:#fff;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:700;margin-top:6px}
+.note{font-size:13px;color:var(--muted);text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <button class="back" id="back" aria-label="Retour aux packs" hidden>←</button>
+  <div class="brand" id="brand">Pack.ma</div>
+  <a class="call" id="callTop" href="#">📞 Appeler</a>
+</header>
+
+<main id="view"></main>
+
+<footer>
+  Une question ? <a id="waFoot" href="#">WhatsApp</a> ou appelez le <a id="telFoot" href="#"></a>.<br>© <span id="nomFoot">Pack.ma</span>
+</footer>
+
+<div id="bar"><div class="bi">
+  <div class="bl"><span id="bCount"></span><b id="bTot"></b></div>
+  <button class="bo" id="bOrder">Commander mon pack</button>
+</div></div>
+
+<div id="overlay" role="dialog" aria-modal="true" aria-labelledby="shT">
+  <div class="sheet">
+    <div class="sh"><h2 id="shT">Ma commande</h2><button class="x" id="x" aria-label="Fermer">✕</button></div>
+    <div class="lines" id="lines"></div>
+    <label for="nom">Votre nom</label>
+    <input id="nom" autocomplete="name" placeholder="Ex : Sara Alaoui">
+    <label for="tel">Votre téléphone</label>
+    <input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="06 12 34 56 78">
+    <label for="ville">Ville</label>
+    <input id="ville" autocomplete="address-level2" placeholder="Ex : Casablanca">
+    <label for="adr">Adresse de livraison</label>
+    <textarea id="adr" rows="2" placeholder="Quartier, rue, numéro, repère"></textarea>
+    <div class="tot" id="tot"></div>
+    <div class="err" id="err" role="alert"></div>
+    <button class="send" id="send">Envoyer la commande sur WhatsApp</button>
+    <p class="note">Paiement en espèces à la livraison. Vous ne payez rien maintenant.</p>
+  </div>
+</div>
+
+<script>
+/* ============ À MODIFIER ============ */
+const NOM = "Pack.ma";                // nom de la boutique
+const WHATSAPP = "212680049654";      // numéro au format international, sans + ni 0
+const TEL_AFFICHE = "06 80 04
