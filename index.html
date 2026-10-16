@@ -1,106 +1,346 @@
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notre Boutique | Maroc</title>
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pack Boutique – Plus vous prenez, moins vous payez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--c1:#12161b;--c2:#1e262e;--acc:#f2c14e;--ink:#2a1f00;--f:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{background:var(--c1);scroll-behavior:smooth}
+body{font-family:var(--f);color:#fff;min-height:100vh;line-height:1.5;
+  background:linear-gradient(165deg,var(--c1),var(--c2));background-attachment:fixed;
+  padding-bottom:calc(110px + env(safe-area-inset-bottom,0))}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f7f5ee;
-      color: #24352c;
-    }
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;
+  padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top,0));
+  background:#0b0e12cc;backdrop-filter:blur(10px);border-bottom:1px solid #ffffff1a}
+.brand{font-weight:800;font-size:20px;letter-spacing:.2px;flex:1}
+.back{background:#ffffff18;border:0;border-radius:50%;width:38px;height:38px;font-size:18px}
+.call{background:var(--acc);color:var(--ink);font-weight:800;text-decoration:none;
+  padding:9px 14px;border-radius:999px;font-size:14px}
 
-    header {
-      padding: 24px 16px;
-      text-align: center;
-      background: #244c3a;
-      color: white;
-    }
+main{max-width:980px;margin:0 auto;padding:0 16px}
 
-    header h1 { margin: 0 0 8px; }
-    header p { margin: 0; }
+.hero{padding:34px 0 8px}
+.hero h1{font-size:clamp(32px,9vw,54px);font-weight:800;line-height:1.08;max-width:16ch}
+.hero p{margin-top:14px;font-size:17px;color:#ffffffc4;max-width:40ch}
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:24px 0 8px}
+.tier{border:1px solid #ffffff26;border-radius:12px;padding:10px 4px;text-align:center;background:#ffffff0d}
+.tier b{display:block;font-size:22px;color:var(--acc);font-weight:800}
+.tier span{font-size:12px;color:#ffffffb0}
+.ex{font-size:13.5px;color:#ffffff9c;margin-bottom:6px}
+h2.sec{font-size:22px;font-weight:800;margin:26px 0 14px}
+.packs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:700px){.packs{grid-template-columns:repeat(4,1fr);gap:16px}}
+.tile{border:0;border-radius:18px;padding:20px 14px 16px;text-align:left;color:#fff;
+  display:flex;flex-direction:column;gap:6px;min-height:190px;position:relative;overflow:hidden;
+  box-shadow:0 8px 24px #0005}
+.tile .em{font-size:44px}
+.tile h3{font-size:19px;font-weight:800;margin-top:auto}
+.tile small{font-size:13px;color:#ffffffcc}
+.tile .go{margin-top:6px;align-self:flex-start;background:var(--k);color:var(--i);
+  font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px}
 
-    .intro {
-      text-align: center;
-      padding: 36px 18px;
-    }
+.phead{padding:26px 0 6px}
+.phead .em{font-size:46px}
+.phead h1{font-size:clamp(28px,8vw,44px);font-weight:800;line-height:1.1}
+.phead p{color:#ffffffc4;margin-top:6px;max-width:42ch}
+.prog{margin:18px 0 6px;background:#00000030;border:1px solid #ffffff1f;border-radius:16px;padding:14px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.step{text-align:center;border-radius:10px;padding:8px 2px;background:#ffffff12;color:#ffffff9c;font-size:12px;font-weight:700}
+.step b{display:block;font-size:18px}
+.step.on{background:var(--acc);color:var(--ink)}
+.msg{margin-top:10px;font-size:14.5px;font-weight:700;text-align:center}
 
-    .intro h2 { font-size: 28px; }
-    .intro p { line-height: 1.6; }
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:16px}}
+.card{background:#ffffff12;border:1.5px solid #ffffff1f;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.card.in{border-color:var(--acc);background:#ffffff1d}
+.pic{background:#00000026;text-align:center;font-size:54px;padding:20px 0 16px;position:relative}
+.badge{position:absolute;top:8px;right:8px;background:var(--acc);color:var(--ink);font-size:12px;font-weight:800;padding:3px 8px;border-radius:999px}
+.inf{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.inf h3{font-size:15.5px;font-weight:700;line-height:1.25}
+.inf p{font-size:13px;color:#ffffffa8;flex:1}
+.pr{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pr .new{font-size:21px;font-weight:800}
+.pr .new small{font-size:13px;font-weight:700}
+.pr .old{font-size:14px;color:#ffffff88;text-decoration:line-through}
+.add{border:0;border-radius:10px;padding:12px;font-weight:800;font-size:14.5px;background:var(--acc);color:var(--ink)}
+.card.in .add{background:transparent;color:#fff;border:1.5px solid #ffffff55}
 
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
-      padding: 18px;
-      max-width: 1000px;
-      margin: auto;
-    }
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;
+  background:#0b0e12;border-top:2px solid var(--acc);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0))}
+#bar.show{display:block}
+.bi{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.bl{flex:1;font-size:13.5px;color:#ffffffb8}
+.bl b{display:block;font-size:20px;color:#fff;font-weight:800}
+.bl em{color:var(--acc);font-style:normal;font-weight:800}
+.bo{background:var(--acc);color:var(--ink);border:0;border-radius:12px;padding:14px 18px;font-weight:800;font-size:15.5px}
 
-    .product {
-      background: white;
-      border-radius: 14px;
-      padding: 22px;
-      text-align: center;
-      box-shadow: 0 3px 12px #0000000d;
-    }
+footer{max-width:980px;margin:34px auto 0;padding:0 16px;color:#ffffff99;font-size:14px;text-align:center}
+footer a{color:var(--acc);font-weight:700}
 
-    .emoji { font-size: 48px; }
-    .product h3 { margin-bottom: 8px; }
-    .price { font-weight: bold; color: #244c3a; }
+.liv{margin-top:30px;background:#ffffff10;border:1px solid #ffffff1f;border-radius:16px;padding:18px}
+.liv h2{font-size:20px;margin-bottom:10px}
+.liv ul{list-style:none;padding:0;display:grid;gap:8px;font-size:15px}
+.liv b{color:var(--acc)}
 
-    footer {
-      text-align: center;
-      padding: 26px 12px;
-      margin-top: 24px;
-      background: #e9e7dd;
-      font-size: 14px;
-    }
-  </style>
+#overlay{position:fixed;inset:0;background:#000a;display:none;align-items:flex-end;justify-content:center;z-index:50}
+#overlay.open{display:flex}
+.sheet{background:#fff;color:#12161b;width:100%;max-width:540px;border-radius:22px 22px 0 0;
+  padding:20px 18px calc(22px + env(safe-area-inset-bottom,0));max-height:94vh;overflow-y:auto}
+@media(prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(40px);opacity:.4}}}
+.sh{display:flex;justify-content:space-between;align-items:center}
+.sh h2{font-size:22px;font-weight:800}
+.x{background:#eef1f4;border:0;border-radius:50%;width:38px;height:38px;font-size:18px;color:#12161b}
+.lines{margin:14px 0;border:1px solid #e1e6ea;border-radius:12px;overflow:hidden}
+.ln{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;font-size:14.5px;border-bottom:1px solid #eef1f4}
+.ln:last-child{border-bottom:0}
+.ln s{color:#8a96a0;margin-right:6px;font-size:13px}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 5px}
+input,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid #cfd8de;border-radius:10px;color:#12161b;background:#fff}
+input:focus,textarea:focus{border-color:#1f6f5f}
+.tot{margin:16px 0 4px;border-top:1px solid #e1e6ea;padding-top:12px;display:grid;gap:4px;font-size:15px}
+.tot div{display:flex;justify-content:space-between}
+.tot .save{color:#1a8a3c;font-weight:700}
+.tot .big{font-size:22px;font-weight:800}
+.err{color:#b3261e;font-size:14px;font-weight:700;margin-top:10px;min-height:20px}
+.send{width:100%;background:#25a244;color:#fff;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:800;margin-top:6px}
+.note{font-size:13px;color:#5b6872;text-align:center;margin-top:10px}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Notre Boutique</h1>
-    <p>Des idées pratiques pour votre maison</p>
-  </header>
 
-  <section class="intro">
-    <h2>Bienvenue !</h2>
-    <p>Découvrez bientôt notre sélection d’accessoires pratiques pour la cuisine et la maison au Maroc.</p>
-  </section>
+<header class="top">
+  <button class="back" id="back" aria-label="Retour aux packs" hidden>←</button>
+  <div class="brand">Pack Boutique</div>
+  <a class="call" id="callTop" href="#">📞 Appeler</a>
+</header>
 
-  <section class="products">
-    <article class="product">
-      <div class="emoji">🍳</div>
-      <h3>Accessoires de cuisine</h3>
-      <p>Des idées utiles pour faciliter votre quotidien.</p>
-      <p class="price">Prix à confirmer</p>
-    </article>
+<main id="view"></main>
 
-    <article class="product">
-      <div class="emoji">🏠</div>
-      <h3>Organisation de la maison</h3>
-      <p>Des solutions pratiques pour gagner de la place.</p>
-      <p class="price">Prix à confirmer</p>
-    </article>
+<footer>
+  Une question ? <a id="waFoot" href="#">WhatsApp</a> ou appelez le <a id="telFoot" href="#"></a>.<br>© Pack Boutique
+</footer>
 
-    <article class="product">
-      <div class="emoji">🧺</div>
-      <h3>Rangement malin</h3>
-      <p>Une maison mieux organisée, simplement.</p>
-      <p class="price">Bientôt disponible</p>
-    </article>
-  </section>
+<div id="bar"><div class="bi">
+  <div class="bl"><span id="bCount"></span><b id="bTot"></b></div>
+  <button class="bo" id="bOrder">Commander mon pack</button>
+</div></div>
 
-  <footer>
-    <p>Mohammedia · Casablanca · Maroc</p>
-    <p>Notre Boutique — Ouverture prochaine</p>
-  </footer>
+<div id="overlay" role="dialog" aria-modal="true" aria-labelledby="shT">
+  <div class="sheet">
+    <div class="sh"><h2 id="shT">Ma commande</h2><button class="x" id="x" aria-label="Fermer">✕</button></div>
+    <div class="lines" id="lines"></div>
+    <label for="nom">Votre nom</label>
+    <input id="nom" autocomplete="name" placeholder="Ex : Sara Alaoui">
+    <label for="tel">Votre téléphone</label>
+    <input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="06 12 34 56 78">
+    <label for="ville">Ville</label>
+    <input id="ville" autocomplete="address-level2" placeholder="Ex : Casablanca">
+    <label for="adr">Adresse de livraison</label>
+    <textarea id="adr" rows="2" placeholder="Quartier, rue, numéro, repère"></textarea>
+    <div class="tot" id="tot"></div>
+    <div class="err" id="err" role="alert"></div>
+    <button class="send" id="send">Envoyer la commande sur WhatsApp</button>
+    <p class="note">Paiement en espèces à la livraison. Vous ne payez rien maintenant.</p>
+  </div>
+</div>
+
+<script>
+/* ============ À MODIFIER ============ */
+const WHATSAPP = "212600000000";      // ton numéro, format international sans + ni 0 (ex : 212661234567)
+const TEL_AFFICHE = "06 00 00 00 00"; // numéro affiché sur le site
+const FRAIS = 30;                     // frais de livraison (DH)
+const GRATUIT_DES = 300;              // livraison gratuite à partir de ce total (0 = jamais)
+
+/* Remises : à partir de X produits dans le pack, tous les produits sont réduits de Y % */
+const REMISES = [ {min:2, pct:5}, {min:3, pct:10}, {min:4, pct:15}, {min:5, pct:30} ];
+
+const PACKS = [
+ { id:"voiture", nom:"Pack Voiture", em:"🚗", accroche:"Tout pour une voiture propre et confortable.",
+   t:{c1:"#0f141a",c2:"#223040",acc:"#ff7a3c",ink:"#1a0d05"},
+   produits:[
+    {id:"v1",e:"📱",nom:"Support téléphone magnétique",desc:"Se fixe sur la grille d’aération.",prix:100},
+    {id:"v2",e:"🧹",nom:"Aspirateur voiture sans fil",desc:"Petit, puissant, rechargeable.",prix:149},
+    {id:"v3",e:"🧰",nom:"Organisateur de coffre",desc:"Pliable, avec compartiments.",prix:119},
+    {id:"v4",e:"🛞",nom:"Housse de volant",desc:"Meilleure prise en main, anti-glisse.",prix:69},
+    {id:"v5",e:"🔌",nom:"Chargeur voiture rapide USB",desc:"Deux ports pour charger deux téléphones.",prix:79},
+    {id:"v6",e:"🗑️",nom:"Poubelle de voiture",desc:"Se suspend derrière le siège.",prix:59}
+   ]},
+ { id:"maison", nom:"Pack Maison", em:"🏠", accroche:"Rangez, nettoyez, gagnez de la place.",
+   t:{c1:"#0b2823",c2:"#1a4a40",acc:"#f2c14e",ink:"#2a1f00"},
+   produits:[
+    {id:"m1",e:"📦",nom:"Boîtes de rangement (lot de 6)",desc:"Transparentes et empilables.",prix:100},
+    {id:"m2",e:"🗂️",nom:"Organisateur de tiroir extensible",desc:"Sépare couverts, câbles, petits objets.",prix:69},
+    {id:"m3",e:"🚿",nom:"Étagère de douche sans perçage",desc:"Se fixe sans percer le mur.",prix:89},
+    {id:"m4",e:"🪥",nom:"Brosse de nettoyage électrique",desc:"Joints, baignoire, plaques de cuisson.",prix:179},
+    {id:"m5",e:"🧽",nom:"Chiffons microfibre (lot de 10)",desc:"Vitres, meubles, inox. Lavables.",prix:49},
+    {id:"m6",e:"🧥",nom:"Cintres gain de place (lot de 10)",desc:"Plus de vêtements dans le même placard.",prix:59}
+   ]},
+ { id:"maman", nom:"Pack Maman", em:"👩‍🍳", accroche:"Des petits gestes en moins en cuisine.",
+   t:{c1:"#3a1430",c2:"#702a58",acc:"#ff9bb8",ink:"#3a0f22"},
+   produits:[
+    {id:"p1",e:"🥕",nom:"Coupe-légumes électrique rotatif",desc:"Râpe et coupe en quelques secondes.",prix:100},
+    {id:"p2",e:"🍽️",nom:"Égouttoir extensible en inox",desc:"S’ajuste à la taille de l’évier.",prix:129},
+    {id:"p3",e:"🧄",nom:"Hachoir électrique",desc:"Ail, oignon, herbes. Rechargeable.",prix:169},
+    {id:"p4",e:"🍱",nom:"Lunchbox électrique",desc:"Réchauffe le repas au travail.",prix:189},
+    {id:"p5",e:"🥤",nom:"Bouteille blender portable",desc:"Smoothies où vous voulez.",prix:139},
+    {id:"p6",e:"⚖️",nom:"Balance de cuisine digitale",desc:"Précise, plate, facile à ranger.",prix:79}
+   ]},
+ { id:"sport", nom:"Pack Sport", em:"🏋️", accroche:"Le matériel pour s’entraîner chez soi.",
+   t:{c1:"#0a1f4a",c2:"#15449a",acc:"#c5f43c",ink:"#1a2a00"},
+   produits:[
+    {id:"s1",e:"🧘",nom:"Tapis de yoga antidérapant",desc:"Épais, confortable, facile à rouler.",prix:100},
+    {id:"s2",e:"🪢",nom:"Bandes de résistance (set de 5)",desc:"Cinq niveaux pour tous les exercices.",prix:79},
+    {id:"s3",e:"🤸",nom:"Corde à sauter réglable",desc:"Légère, avec compteur de sauts.",prix:49},
+    {id:"s4",e:"💧",nom:"Bouteille isotherme 750 ml",desc:"Garde le froid ou le chaud.",prix:89},
+    {id:"s5",e:"🎒",nom:"Sac de sport",desc:"Compartiment chaussures séparé.",prix:119},
+    {id:"s6",e:"💆",nom:"Rouleau de massage",desc:"Détend les muscles après l’effort.",prix:99}
+   ]}
+];
+const HOME_T = {c1:"#12161b",c2:"#1f2830",acc:"#f2c14e",ink:"#2a1f00"};
+/* ============ FIN ============ */
+
+const $ = s => document.querySelector(s);
+const dh = n => n + " DH";
+const wa = "https://wa.me/" + WHATSAPP;
+const paniers = {};
+let courant = null;
+
+$("#callTop").href = "tel:+" + WHATSAPP;
+$("#waFoot").href = wa;
+$("#telFoot").href = "tel:+" + WHATSAPP; $("#telFoot").textContent = TEL_AFFICHE;
+
+function theme(t){
+  const s = document.documentElement.style;
+  s.setProperty("--c1",t.c1); s.setProperty("--c2",t.c2); s.setProperty("--acc",t.acc); s.setProperty("--ink",t.ink);
+}
+function pct(n){ let p = 0; REMISES.forEach(r => { if(n >= r.min) p = r.pct; }); return p; }
+function prixRem(prix,p){ return Math.round(prix * (1 - p/100)); }
+function pack(id){ return PACKS.find(p => p.id === id); }
+function sel(id){ return paniers[id] || (paniers[id] = []); }
+function calc(id){
+  const p = pack(id), ids = sel(id), n = ids.length, r = pct(n);
+  const items = p.produits.filter(x => ids.includes(x.id));
+  const base = items.reduce((a,x) => a + x.prix, 0);
+  const sous = items.reduce((a,x) => a + prixRem(x.prix,r), 0);
+  const liv = n ? ((GRATUIT_DES && sous >= GRATUIT_DES) ? 0 : FRAIS) : 0;
+  return {n, r, items, base, sous, remise: base - sous, liv, total: sous + liv};
+}
+function message(n){
+  if(n >= REMISES[REMISES.length-1].min) return "Remise maximale : −" + pct(n) + " % sur tout le pack";
+  const next = REMISES.find(r => r.min > n);
+  const reste = next.min - n;
+  return "Ajoutez " + reste + " produit" + (reste > 1 ? "s" : "") + " pour passer à −" + next.pct + " %";
+}
+
+function accueil(){
+  courant = null; theme(HOME_T);
+  $("#back").hidden = true; $("#bar").classList.remove("show");
+  const v = $("#view");
+  v.innerHTML =
+   "<section class='hero'><h1>Plus vous prenez, moins vous payez.</h1>" +
+   "<p>Choisissez un pack, ajoutez vos produits : chaque produit en plus fait baisser le prix de tout le pack.</p>" +
+   "<div class='tiers'>" + REMISES.map(r => "<div class='tier'><b>−" + r.pct + " %</b><span>" + r.min + (r.min === REMISES[REMISES.length-1].min ? " produits et +" : " produits") + "</span></div>").join("") + "</div>" +
+   "<p class='ex'>Exemple : un produit à 100 DH reste à 100 DH. Avec 2 produits, il passe à 95 DH.</p></section>" +
+   "<h2 class='sec'>Choisissez votre pack</h2><div class='packs'>" +
+   PACKS.map(p => "<button class='tile' data-p='" + p.id + "' style='background:linear-gradient(150deg," + p.t.c1 + "," + p.t.c2 + ");--k:" + p.t.acc + ";--i:" + p.t.ink + "'>" +
+     "<span class='em'>" + p.em + "</span><h3>" + p.nom + "</h3><small>" + p.produits.length + " produits · dès " + dh(Math.min(...p.produits.map(x => x.prix))) + "</small>" +
+     "<span class='go'>Voir le pack</span></button>").join("") + "</div>" +
+   "<section class='liv'><h2>Livraison</h2><ul>" +
+   "<li>🚚 Partout au Maroc en <b>24 à 72 h</b></li>" +
+   "<li>💵 Paiement <b>en espèces à la livraison</b></li>" +
+   "<li>🏷️ Frais : <b>" + dh(FRAIS) + "</b>" + (GRATUIT_DES ? ", gratuits dès " + dh(GRATUIT_DES) : "") + "</li>" +
+   "<li>📞 Nous vous appelons pour confirmer</li></ul></section>";
+  window.scrollTo(0,0);
+}
+
+function ouvrirPack(id, garderScroll){
+  const y = window.scrollY;
+  courant = id; const p = pack(id); theme(p.t);
+  $("#back").hidden = false;
+  const c = calc(id);
+  const v = $("#view");
+  v.innerHTML =
+   "<section class='phead'><div class='em'>" + p.em + "</div><h1>" + p.nom + "</h1><p>" + p.accroche + "</p>" +
+   "<div class='prog'><div class='steps'>" + REMISES.map(r => "<div class='step" + (c.n >= r.min ? " on" : "") + "'><b>−" + r.pct + " %</b>" + r.min + (r.min === REMISES[REMISES.length-1].min ? "+" : "") + " produits</div>").join("") + "</div>" +
+   "<div class='msg'>" + message(c.n) + "</div></div></section>" +
+   "<div class='grid'>" + p.produits.map(x => {
+      const dedans = sel(id).includes(x.id);
+      const np = dedans ? prixRem(x.prix, c.r) : x.prix;
+      return "<article class='card" + (dedans ? " in" : "") + "'>" +
+        "<div class='pic' aria-hidden='true'>" + x.e + (dedans && c.r ? "<span class='badge'>−" + c.r + " %</span>" : "") + "</div>" +
+        "<div class='inf'><h3>" + x.nom + "</h3><p>" + x.desc + "</p>" +
+        "<div class='pr'><span class='new'>" + np + " <small>DH</small></span>" + (dedans && c.r ? "<span class='old'>" + x.prix + " DH</span>" : "") + "</div>" +
+        "<button class='add' data-a='" + x.id + "'>" + (dedans ? "Retirer du pack" : "Ajouter au pack") + "</button></div></article>";
+   }).join("") + "</div>";
+  majBarre();
+  window.scrollTo(0, garderScroll ? y : 0);
+}
+function majBarre(){
+  if(!courant){ $("#bar").classList.remove("show"); return; }
+  const c = calc(courant);
+  if(!c.n){ $("#bar").classList.remove("show"); return; }
+  $("#bar").classList.add("show");
+  $("#bCount").innerHTML = c.n + " produit" + (c.n > 1 ? "s" : "") + (c.r ? " · <em>−" + c.r + " %</em>" : "");
+  $("#bTot").textContent = dh(c.sous);
+}
+
+$("#view").addEventListener("click", e => {
+  const t = e.target.closest(".tile");
+  if(t){ ouvrirPack(t.dataset.p, false); return; }
+  const a = e.target.closest(".add");
+  if(a && courant){
+    const ids = sel(courant), i = ids.indexOf(a.dataset.a);
+    if(i >= 0) ids.splice(i,1); else ids.push(a.dataset.a);
+    ouvrirPack(courant, true);
+  }
+});
+$("#back").onclick = accueil;
+
+function ouvrirCommande(){
+  const c = calc(courant);
+  $("#lines").innerHTML = c.items.map(x =>
+    "<div class='ln'><span>" + x.nom + "</span><span>" + (c.r ? "<s>" + x.prix + "</s>" : "") + "<b>" + dh(prixRem(x.prix,c.r)) + "</b></span></div>").join("");
+  $("#tot").innerHTML =
+    "<div><span>Sous-total</span><span>" + dh(c.base) + "</span></div>" +
+    (c.r ? "<div class='save'><span>Remise pack −" + c.r + " %</span><span>−" + dh(c.remise) + "</span></div>" : "") +
+    "<div><span>Livraison</span><span>" + (c.liv ? dh(c.liv) : "Gratuite") + "</span></div>" +
+    "<div class='big'><span>Total à payer</span><span>" + dh(c.total) + "</span></div>";
+  $("#err").textContent = "";
+  $("#overlay").classList.add("open"); document.body.style.overflow = "hidden";
+}
+function fermer(){ $("#overlay").classList.remove("open"); document.body.style.overflow = ""; }
+$("#bOrder").onclick = ouvrirCommande;
+$("#x").onclick = fermer;
+$("#overlay").addEventListener("click", e => { if(e.target.id === "overlay") fermer(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") fermer(); });
+
+$("#send").onclick = () => {
+  const nom = $("#nom").value.trim(), t = $("#tel").value.trim(), ville = $("#ville").value.trim(), adr = $("#adr").value.trim();
+  if(!nom || !ville || !adr){ $("#err").textContent = "Remplissez votre nom, votre ville et votre adresse."; return; }
+  if(t.replace(/\D/g,"").length < 9){ $("#err").textContent = "Entrez un numéro de téléphone valide (au moins 9 chiffres)."; return; }
+  const c = calc(courant), p = pack(courant);
+  const msg = "Bonjour, je veux commander le " + p.nom + " :\n\n" +
+    c.items.map(x => "- " + x.nom + " : " + dh(prixRem(x.prix,c.r))).join("\n") + "\n\n" +
+    "Sous-total : " + dh(c.base) + "\n" +
+    (c.r ? "Remise pack −" + c.r + " % : −" + dh(c.remise) + "\n" : "") +
+    "Livraison : " + (c.liv ? dh(c.liv) : "gratuite") + "\n" +
+    "Total à payer à la livraison : " + dh(c.total) + "\n\n" +
+    "Nom : " + nom + "\nTéléphone : " + t + "\nVille : " + ville + "\nAdresse : " + adr;
+  window.open(wa + "?text=" + encodeURIComponent(msg), "_blank");
+  fermer();
+};
+
+accueil();
+</script>
 </body>
 </html>
