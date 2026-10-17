@@ -1,423 +1,275 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pack.ma — Des packs malins au Maroc</title>
-<meta name="description" content="Composez votre pack cuisine, voiture, maman ou sport. Remises selon le nombre de produits et commande WhatsApp.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pack.ma — Robot 1</title>
 <style>
-:root{--bg:#f6f7f4;--paper:#fff;--ink:#172b26;--muted:#64716b;--line:#e1e7e2;--accent:#176b50;--soft:#e7f1eb;--gold:#f3c96b;--radius:18px}
+:root{color-scheme:dark;--bg:#0b1020;--panel:#151e30;--line:#34415a;--text:#f4f7ff;--muted:#a8b5cc;--green:#75e5c0}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,sans-serif;line-height:1.5;padding-bottom:100px}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-a{color:inherit}
-header{position:sticky;top:0;z-index:10;background:#ffffffed;border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
-.logo{font-size:23px;font-weight:900;letter-spacing:-1px;text-decoration:none}
-.logo span{color:var(--accent)}
-.header-note{font-size:12px;color:var(--muted);flex:1}
-.header-wa{background:var(--ink);color:#fff;border-radius:999px;padding:9px 13px;text-decoration:none;font-size:13px;font-weight:800}
-main{max-width:1060px;margin:auto;padding:0 16px}
-.hero{padding:32px 0 18px}
-.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;font-weight:900;color:var(--accent)}
-h1{font-size:clamp(34px,8vw,56px);line-height:1.03;letter-spacing:-1.7px;margin:9px 0 14px;max-width:700px}
-.hero p{color:var(--muted);max-width:570px;font-size:16px;margin:0}
-.hero-points{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.pill{background:var(--soft);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800}
-.discount{background:var(--ink);color:white;border-radius:var(--radius);padding:17px;margin:12px 0 25px}
-.discount h2{font-size:17px;margin:0 0 12px}
-.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.tier{background:#ffffff18;border:1px solid #ffffff25;border-radius:12px;padding:9px 4px;text-align:center}
-.tier b{display:block;font-size:21px}
-.tier span{font-size:11px;color:#e1e9e4}
-.tier.active{background:var(--gold);color:var(--ink);border-color:var(--gold)}
-.tier.active span{color:var(--ink)}
-.discount-foot{font-size:12px;color:#dce7e0;margin-top:10px}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:24px 0 12px}
-.section-head h2{font-size:24px;margin:0}
-.section-head p{font-size:12px;color:var(--muted);margin:0}
-.categories{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.cat{border:1px solid var(--line);background:white;border-radius:16px;padding:15px;text-align:left;min-height:118px;display:flex;flex-direction:column;gap:3px}
-.cat[aria-pressed="true"]{border:2px solid var(--accent);background:var(--soft);padding:14px}
-.cat .emoji{font-size:29px}
-.cat strong{font-size:16px}
-.cat small{color:var(--muted);font-size:12px}
-.toolbar{display:flex;gap:9px;margin:17px 0 8px}
-.toolbar input,.toolbar select{min-width:0;width:100%;border:1px solid var(--line);border-radius:12px;background:white;padding:11px;color:var(--ink)}
-.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:12px}
-.product{background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
-.product.selected{border:2px solid var(--accent)}
-.product-art{height:112px;background:linear-gradient(135deg,#e8f1eb,#f8f3e7);display:grid;place-items:center;font-size:48px;position:relative}
-.selected-flag{position:absolute;top:8px;left:8px;background:var(--accent);color:white;border-radius:999px;font-size:10px;font-weight:900;padding:4px 7px}
-.product-body{padding:11px;display:flex;flex-direction:column;gap:6px;flex:1}
-.product h3{font-size:14px;line-height:1.25;margin:0}
-.product p{font-size:12px;color:var(--muted);margin:0;flex:1}
-.price{font-size:19px;font-weight:900}
-.add{border:0;border-radius:10px;background:var(--ink);color:white;padding:11px 8px;font-weight:800;font-size:13px;margin-top:4px}
-.product.selected .add{background:white;color:var(--accent);border:1px solid var(--accent)}
-.empty{grid-column:1/-1;text-align:center;padding:28px 12px;background:white;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
-.how{margin:28px 0;background:white;border:1px solid var(--line);border-radius:var(--radius);padding:18px}
-.how h2{margin:0 0 10px;font-size:21px}
-.how ol{padding-left:22px;margin:0;display:grid;gap:8px;color:var(--muted);font-size:14px}
-.how b{color:var(--ink)}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:25px 16px}
-#cartbar{position:fixed;z-index:20;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -8px 28px #172b2610;padding:11px 14px;display:none}
-#cartbar.show{display:block}
-.cart-inner{max-width:1060px;margin:auto;display:flex;align-items:center;gap:12px}
-.cart-summary{flex:1;min-width:0;font-size:12px;color:var(--muted)}
-.cart-summary strong{display:block;color:var(--ink);font-size:20px}
-.cart-summary span{display:block}
-.primary{border:0;border-radius:12px;background:var(--accent);color:#fff;padding:13px 15px;font-weight:900;font-size:14px}
-#overlay{display:none;position:fixed;inset:0;background:#0c1714a8;z-index:40;align-items:flex-end;justify-content:center}
-#overlay.open{display:flex}
-.sheet{background:white;width:100%;max-width:560px;max-height:94vh;overflow:auto;border-radius:22px 22px 0 0;padding:19px 17px 22px}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.sheet h2{font-size:22px;margin:0}
-.close{border:0;background:var(--soft);width:38px;height:38px;border-radius:50%;font-size:19px}
-.order-lines{border:1px solid var(--line);border-radius:12px;margin:13px 0;overflow:hidden}
-.order-line{display:flex;justify-content:space-between;gap:12px;padding:9px 11px;border-bottom:1px solid var(--line);font-size:13px}
-.order-line:last-child{border:0}
-.field{margin:11px 0}
-.field label{display:block;font-size:13px;font-weight:800;margin-bottom:5px}
-.field input,.field textarea{width:100%;border:1px solid #cbd6cf;border-radius:10px;padding:12px;background:white;color:var(--ink);font-size:16px}
-.totals{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:5px;font-size:14px}
-.total-row{display:flex;justify-content:space-between;gap:12px}
-.grand{font-size:21px;font-weight:900}
-.error{color:#a12626;font-size:13px;min-height:18px;margin:7px 0}
-.send{width:100%;background:#1c9b53;color:white;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:900}
-.note{text-align:center;color:var(--muted);font-size:12px;margin:10px 0 0}
-@media(min-width:650px){
-.categories{grid-template-columns:repeat(4,1fr)}
-.products{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
-.product-art{height:145px}
-.product h3{font-size:15px}
-.hero{padding-top:45px}
-.cat{min-height:132px;padding:18px}
-.cat[aria-pressed="true"]{padding:17px}
-}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Arial,sans-serif}
+header{padding:25px 18px;background:#13283a;border-bottom:1px solid var(--line)}
+main{max-width:1000px;margin:auto;padding:18px}
+header>div{max-width:1000px;margin:auto}
+h1{font-size:clamp(25px,5vw,36px);margin:8px 0}
+h2{font-size:19px;margin-top:0}
+p,.muted{color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:16px}
+label{display:block;margin:12px 0 5px;font-weight:bold;font-size:13px}
+input,select,textarea{width:100%;padding:11px;background:#0c1424;color:var(--text);border:1px solid var(--line);border-radius:8px;font:inherit}
+textarea{min-height:80px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+button{padding:11px 14px;border-radius:8px;border:1px solid var(--line);background:#24324a;color:var(--text);font-weight:bold;cursor:pointer}
+button.primary{background:var(--green);color:#09221b;border-color:var(--green)}
+button.danger{background:#4a202a}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.links a{color:var(--green);background:#202d42;border:1px solid var(--line);padding:12px;border-radius:8px;text-decoration:none}
+.keywords{display:flex;flex-wrap:wrap;gap:7px}
+.keyword,.tag{background:#24334a;border-radius:6px;padding:6px 8px;font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#202d42;padding:12px;border-radius:8px}
+.stat strong{display:block;color:var(--green);font-size:23px}
+.item{padding:14px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
+.item a{color:var(--green)}
+.notice{padding:12px;border-left:3px solid var(--green);background:#142a2b;color:#d5f6ec}
+small{color:var(--muted)}
+@media(max-width:600px){.grid,.links{grid-template-columns:1fr}main{padding:10px}.card{padding:14px}}
 </style>
 </head>
 <body>
 <header>
-<a class="logo" href="#top">Pack<span>.ma</span></a>
-<div class="header-note">Des packs malins, au Maroc 🇲🇦</div>
-<a class="header-wa" id="headerWa" href="#" target="_blank" rel="noopener">WhatsApp ↗</a>
+<div>
+<div style="color:#75e5c0;font-weight:bold;letter-spacing:2px">PACK.MA · INTELLIGENCE COMMERCIALE</div>
+<h1>Robot 1 — Recherche de concurrents</h1>
+<p>Recherche de vendeurs, prix et offres pour le marché marocain.</p>
+<span class="tag">Français</span> <span class="tag">العربية</span> <span class="tag">Darija</span> <span class="tag">English</span>
+</div>
 </header>
-
-<main id="top">
-<section class="hero">
-<div class="eyebrow">Simple · Pratique · Malin</div>
-<h1>Choisissez vos produits. <span style="color:var(--accent)">Économisez plus.</span></h1>
-<p>Composez votre pack selon vos besoins. Plus vous choisissez de produits, plus votre remise augmente. Commande sur WhatsApp et paiement à la livraison.</p>
-<div class="hero-points">
-<span class="pill">🚚 Livraison au Maroc</span>
-<span class="pill">💵 Paiement à la réception</span>
-<span class="pill">📱 Commande simple</span>
+<main>
+<section class="card">
+<h2>1. Produit à rechercher</h2>
+<label for="product">Nom du produit *</label>
+<input id="product" placeholder="Ex. organisateur de cuisine">
+<div class="grid">
+<div><label for="city">Zone géographique</label>
+<select id="city"><option>Maroc</option><option>Casablanca</option><option>Mohammedia</option><option>Rabat</option><option>Marrakech</option><option>Tanger</option><option>Fès</option><option>Agadir</option></select></div>
+<div><label for="category">Catégorie</label>
+<select id="category"><option>Cuisine et maison</option><option>Voiture</option><option>Maman et bébé</option><option>Sport</option><option>Beauté</option><option>Électronique</option><option>Autre</option></select></div>
 </div>
+<label for="variants">Synonymes, marques et variantes (un par ligne)</label>
+<textarea id="variants" placeholder="Nom alternatif&#10;Marque ou référence&#10;Nom en arabe si connu"></textarea>
+<div class="actions"><button class="primary" id="generate">Générer les mots-clés et les liens</button><button id="clear">Effacer</button></div>
+<div id="keywordOutput"></div>
 </section>
 
-<section class="discount">
-<h2>Votre remise augmente avec votre pack</h2>
-<div class="tiers">
-<div class="tier" data-tier="2"><b>−10%</b><span>Dès 2 produits</span></div>
-<div class="tier" data-tier="3"><b>−15%</b><span>Dès 3 produits</span></div>
-<div class="tier" data-tier="4"><b>−20%</b><span>Dès 4 produits</span></div>
-<div class="tier" data-tier="5"><b>−30%</b><span>Dès 5 produits</span></div>
-</div>
-<div class="discount-foot">Remise appliquée au prix des produits sélectionnés. Livraison à confirmer selon la ville.</div>
+<section class="card">
+<h2>2. Rechercher sur les plateformes</h2>
+<p>Les liens ci-dessous ouvrent les recherches sur les sources publiques. Tu devras examiner les résultats et enregistrer les vendeurs pertinents.</p>
+<div id="searchLinks" class="links">Génère d'abord les recherches ci-dessus.</div>
 </section>
 
-<section>
-<div class="section-head">
-<h2>Choisissez votre univers</h2>
-<p id="productCount">3 produits</p>
+<section class="card">
+<h2>3. Ajouter un concurrent trouvé</h2>
+<form id="recordForm">
+<label for="seller">Nom du vendeur ou de la boutique *</label>
+<input id="seller" required placeholder="Nom de la boutique">
+<div class="grid">
+<div><label for="platform">Plateforme</label>
+<select id="platform"><option>Site marchand</option><option>Google</option><option>Facebook</option><option>Instagram</option><option>TikTok</option><option>YouTube</option><option>Marketplace</option><option>Grossiste</option><option>Autre</option></select></div>
+<div><label for="type">Type de concurrent</label>
+<select id="type"><option>À vérifier</option><option>Direct</option><option>Indirect</option><option>Grossiste / fournisseur potentiel</option></select></div>
 </div>
-<div class="categories">
-<button class="cat" data-category="cuisine" aria-pressed="true"><span class="emoji">🍳</span><strong>Cuisine</strong><small>Des astuces au quotidien</small></button>
-<button class="cat" data-category="voiture" aria-pressed="false"><span class="emoji">🚗</span><strong>Voiture</strong><small>Pratique et bien rangé</small></button>
-<button class="cat" data-category="maman" aria-pressed="false"><span class="emoji">🧸</span><strong>Maman & bébé</strong><small>Pour faciliter les journées</small></button>
-<button class="cat" data-category="sport" aria-pressed="false"><span class="emoji">💪</span><strong>Sport</strong><small>Bouger à son rythme</small></button>
+<label for="url">URL de la page du vendeur ou du produit *</label>
+<input id="url" type="url" required placeholder="https://...">
+<div class="grid">
+<div><label for="price">Prix affiché</label><input id="price" placeholder="Ex. 149"></div>
+<div><label for="currency">Devise</label><select id="currency"><option>MAD</option><option>EUR</option><option>USD</option><option>Non indiquée</option><option>Autre</option></select></div>
 </div>
-<div class="toolbar">
-<input id="search" type="search" placeholder="Rechercher un produit…" aria-label="Rechercher un produit">
-<select id="sort" aria-label="Trier les produits">
-<option value="default">À découvrir</option>
-<option value="price-up">Prix croissant</option>
-<option value="price-down">Prix décroissant</option>
-</select>
-</div>
-<div class="products" id="products"></div>
+<label for="confidence">État de vérification</label>
+<select id="confidence"><option>A_VERIFIER</option><option>VERIFIE</option><option>PARTIELLEMENT_VERIFIE</option></select>
+<label for="notes">Observations</label>
+<textarea id="notes" placeholder="Prix, livraison, promotion, ville, modèle, date..."></textarea>
+<div class="actions"><button class="primary" type="submit">Enregistrer le concurrent</button></div>
+</form>
 </section>
 
-<section class="how">
-<h2>Comment ça marche ?</h2>
-<ol>
-<li><b>Choisissez</b> les produits qui vous intéressent.</li>
-<li><b>Profitez de la remise</b> calculée selon la quantité.</li>
-<li><b>Envoyez votre commande sur WhatsApp</b> avec vos coordonnées.</li>
-<li><b>Confirmez avec nous</b> la disponibilité, les frais de livraison et le total final avant expédition.</li>
-</ol>
+<section class="card">
+<h2>4. Résultats enregistrés</h2>
+<div class="stats">
+<div class="stat"><strong id="total">0</strong><small>Concurrents</small></div>
+<div class="stat"><strong id="verified">0</strong><small>Déclarés vérifiés</small></div>
+<div class="stat"><strong id="priced">0</strong><small>Prix renseignés</small></div>
+</div>
+<div class="actions">
+<button class="primary" id="exportJson">Exporter pour Robot 2 (JSON)</button>
+<button id="exportCsv">Exporter en CSV</button>
+<button id="importBtn">Importer une sauvegarde</button>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+<button class="danger" id="deleteAll">Supprimer toutes les fiches</button>
+</div>
+<p><small>Les données restent dans ce navigateur. Exporte une sauvegarde pour les transférer sur un autre appareil ou les envoyer au Robot 2.</small></p>
+<div id="records"></div>
 </section>
+
+<section class="card">
+<h2>5. Contrôle des sources examinées</h2>
+<p>Coche uniquement les sources que tu as réellement consultées pour ce produit.</p>
+<div id="sourceChecks">
+<label><input type="checkbox" value="Google"> Google et sites web</label>
+<label><input type="checkbox" value="Bing"> Bing</label>
+<label><input type="checkbox" value="Facebook"> Facebook</label>
+<label><input type="checkbox" value="Instagram"> Instagram</label>
+<label><input type="checkbox" value="TikTok"> TikTok</label>
+<label><input type="checkbox" value="YouTube"> YouTube</label>
+<label><input type="checkbox" value="Meta Ad Library"> Meta Ad Library</label>
+<label><input type="checkbox" value="Marketplaces"> Boutiques et marketplaces</label>
+</div>
+<label for="coverageNotes">Sources bloquées ou remarques</label>
+<textarea id="coverageNotes" placeholder="Ex. compte privé, page inaccessible, recherche sans résultat pertinent..."></textarea>
+<div class="actions"><button id="saveCoverage">Enregistrer le contrôle</button></div>
+<p id="coverageStatus" class="muted"></p>
+</section>
+
+<div class="notice"><strong>Transparence :</strong> cette version prépare les recherches et conserve les fiches saisies. Elle ne collecte pas automatiquement tout Internet, n'accède pas aux comptes privés et ne connaît pas le trafic réel des concurrents sans source fiable. Les informations doivent être vérifiées avant de servir à une décision commerciale.</div>
 </main>
-
-<footer>
-Une question ? Écrivez-nous sur <a id="footerWa" href="#" target="_blank" rel="noopener">WhatsApp</a>.<br>
-© <span id="footerName">Pack.ma</span> · Les prix et disponibilités sont à confirmer avant commande.
-</footer>
-
-<div id="cartbar" aria-live="polite">
-<div class="cart-inner">
-<div class="cart-summary">
-<strong id="cartTotal">0 DH</strong>
-<span id="cartInfo">Aucun produit sélectionné</span>
-<span id="cartDiscount"></span>
-</div>
-<button class="primary" id="openOrder">Commander →</button>
-</div>
-</div>
-
-<div id="overlay" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
-<div class="sheet">
-<div class="sheet-head">
-<h2 id="orderTitle">Votre commande</h2>
-<button class="close" id="closeOrder" aria-label="Fermer">×</button>
-</div>
-<div id="orderLines" class="order-lines"></div>
-<div class="field"><label for="customerName">Nom complet *</label><input id="customerName" autocomplete="name" placeholder="Ex. Sara Alaoui"></div>
-<div class="field"><label for="customerPhone">Téléphone *</label><input id="customerPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="06 12 34 56 78"></div>
-<div class="field"><label for="customerCity">Ville *</label><input id="customerCity" autocomplete="address-level2" placeholder="Ex. Mohammedia"></div>
-<div class="field"><label for="customerAddress">Adresse de livraison *</label><textarea id="customerAddress" rows="2" autocomplete="street-address" placeholder="Quartier, rue, numéro, repère"></textarea></div>
-<div class="field"><label for="customerNote">Remarque (facultatif)</label><textarea id="customerNote" rows="2" placeholder="Couleur, disponibilité horaire…"></textarea></div>
-<div class="totals" id="orderTotals"></div>
-<div class="error" id="formError" role="alert"></div>
-<button class="send" id="sendOrder">Envoyer la commande sur WhatsApp</button>
-<p class="note">Vous ne payez rien sur ce site. Paiement à la livraison après confirmation de la commande.</p>
-</div>
-</div>
+<footer style="text-align:center;padding:20px"><small>Pack.ma · Robot 1 · Prototype local</small></footer>
 
 <script>
-const SHOP = {
-  name: "Pack.ma",
-  whatsapp: "212680049654",
-  tiers: [
-    {min:2,rate:10},
-    {min:3,rate:15},
-    {min:4,rate:20},
-    {min:5,rate:30}
-  ]
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const KEY="pack_robot1_competitors_v1";
+const COVER="pack_robot1_coverage_v1";
+let records=[];
+let keywords=[];
+let currentProduct="";
+try{records=JSON.parse(localStorage.getItem(KEY)||"[]");if(!Array.isArray(records))records=[]}catch(e){records=[]}
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function uniq(a){return [...new Set(a.map(x=>x.trim()).filter(Boolean))]}
+function save(){localStorage.setItem(KEY,JSON.stringify(records))}
+function makeUrl(base,q){return base+encodeURIComponent(q)}
+function generate(){
+const p=$("product").value.trim();
+if(!p){alert("Entre le nom du produit.");return}
+currentProduct=p;
+const extras=$("variants").value.split(/\n/).map(s=>s.trim()).filter(Boolean);
+const terms=uniq([p,...extras]);
+const city=$("city").value;
+keywords=uniq([
+...terms,
+...terms.map(x=>x+" Maroc"),
+...terms.map(x=>x+" prix Maroc"),
+...terms.map(x=>x+" acheter Maroc"),
+...terms.map(x=>x+" livraison"),
+...terms.map(x=>x+" بالجملة"),
+...terms.map(x=>x+" ثمن"),
+...terms.map(x=>x+" المغرب"),
+...terms.map(x=>x+" شراء"),
+...terms.map(x=>x+" توصيل"),
+...terms.map(x=>x+" Morocco"),
+...terms.map(x=>x+" price"),
+...terms.map(x=>x+" wholesale"),
+...(city!=="Maroc"?terms.map(x=>x+" "+city):[])
+]);
+$("keywordOutput").innerHTML="<h3>Mots-clés proposés</h3><div class='keywords'>"+keywords.map(x=>"<span class='keyword'>"+esc(x)+"</span>").join("")+"</div><div class='actions'><button id='copyKeywords'>Copier les mots-clés</button></div><p><small>Les variantes arabes sont des suggestions génériques, pas une traduction garantie. Ajoute les termes locaux que tu connais.</small></p>";
+$("copyKeywords").onclick=async()=>{
+try{await navigator.clipboard.writeText(keywords.join("\n"));alert("Mots-clés copiés.")}catch(e){alert("La copie automatique n'est pas disponible sur ce navigateur. Sélectionne les mots-clés manuellement.")}
 };
-
-/* PRIX DE DÉMONSTRATION : vérifiez les prix et vos marges avant de vendre. */
-const PRODUCTS = [
-{id:"k1",cat:"cuisine",name:"Coupe-légumes multifonction",desc:"Pour préparer fruits et légumes plus facilement.",price:149,emoji:"🥕"},
-{id:"k2",cat:"cuisine",name:"Balance de cuisine digitale",desc:"Pour mesurer les ingrédients avec précision.",price:129,emoji:"⚖️"},
-{id:"k3",cat:"cuisine",name:"Pulvérisateur d’huile",desc:"Pour doser l’huile pendant la cuisson.",price:69,emoji:"🫒"},
-{id:"v1",cat:"voiture",name:"Organiseur de siège auto",desc:"Pour garder les petits objets à portée de main.",price:99,emoji:"🚘"},
-{id:"v2",cat:"voiture",name:"Support téléphone voiture",desc:"Pour garder le téléphone bien visible.",price:79,emoji:"📱"},
-{id:"v3",cat:"voiture",name:"Kit de nettoyage auto",desc:"Pour entretenir les surfaces et les détails.",price:89,emoji:"🧽"},
-{id:"m1",cat:"maman",name:"Sac organiseur multifonction",desc:"Pour ranger les essentiels lors des sorties.",price:139,emoji:"👜"},
-{id:"m2",cat:"maman",name:"Boîte à goûter compartimentée",desc:"Pour organiser les petites collations.",price:59,emoji:"🍱"},
-{id:"m3",cat:"maman",name:"Veilleuse douce",desc:"Une petite lumière pour la chambre.",price:89,emoji:"🌙"},
-{id:"s1",cat:"sport",name:"Corde à sauter réglable",desc:"Pour les séances cardio à la maison.",price:49,emoji:"🪢"},
-{id:"s2",cat:"sport",name:"Bandes élastiques fitness",desc:"Pour varier les exercices de renforcement.",price:79,emoji:"🏋️"},
-{id:"s3",cat:"sport",name:"Gourde de sport",desc:"Pour garder de l’eau à portée de main.",price:69,emoji:"🥤"}
+const q=p+" "+city;
+const links=[
+["Google — recherche générale",makeUrl("https://www.google.com/search?q=",q)],
+["Google — vendeurs et prix",makeUrl("https://www.google.com/search?q=",p+" acheter prix "+city)],
+["Google — recherche en arabe",makeUrl("https://www.google.com/search?q=",p+" المغرب ثمن شراء")],
+["Bing",makeUrl("https://www.bing.com/search?q=",q)],
+["Facebook — pages indexées",makeUrl("https://www.google.com/search?q=","site:facebook.com "+q)],
+["Instagram — pages indexées",makeUrl("https://www.google.com/search?q=","site:instagram.com "+q)],
+["TikTok — pages indexées",makeUrl("https://www.google.com/search?q=","site:tiktok.com "+q)],
+["YouTube",makeUrl("https://www.youtube.com/results?search_query=",q)],
+["Meta Ad Library","https://www.facebook.com/ads/library/"],
+["Marketplaces",makeUrl("https://www.google.com/search?q=",q+" boutique en ligne Maroc")]
 ];
-
-let activeCategory = "cuisine";
-const cart = new Set();
-const $ = id => document.getElementById(id);
-const money = n => `${Math.round(n).toLocaleString("fr-FR")} DH`;
-
-function selectedProducts(){
-  return PRODUCTS.filter(p => cart.has(p.id));
+$("searchLinks").innerHTML=links.map(([n,u])=>"<a href='"+esc(u)+"' target='_blank' rel='noopener noreferrer'>"+esc(n)+" ↗</a>").join("");
 }
-
-function discountRate(n){
-  let rate = 0;
-  for(const tier of SHOP.tiers){
-    if(n >= tier.min) rate = tier.rate;
-  }
-  return rate;
+function render(){
+$("total").textContent=records.length;
+$("verified").textContent=records.filter(r=>r.confidence==="VERIFIE").length;
+$("priced").textContent=records.filter(r=>r.price).length;
+if(!records.length){$("records").innerHTML="<p class='muted'>Aucun concurrent enregistré pour le moment.</p>";return}
+$("records").innerHTML=records.slice().reverse().map(r=>"<div class='item'><strong>"+esc(r.seller)+"</strong><br><small>"+esc(r.platform)+" · "+esc(r.type)+" · "+esc(r.confidence)+" · "+esc(r.createdAt)+"</small><p>Produit : "+esc(r.product)+"<br>Prix : "+esc(r.price||"Non renseigné")+" "+esc(r.currency||"")+"<br><a href='"+esc(r.url)+"' target='_blank' rel='noopener noreferrer'>"+esc(r.url)+"</a></p>"+(r.notes?"<p>"+esc(r.notes)+"</p>":"")+"<button data-del='"+esc(r.id)+"' class='danger'>Supprimer</button></div>").join("");
+$("records").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{records=records.filter(r=>r.id!==b.dataset.del);save();render()});
 }
-
-function totals(){
-  const items = selectedProducts();
-  const subtotal = items.reduce((sum,p) => sum + p.price,0);
-  const rate = discountRate(items.length);
-  const savings = Math.round(subtotal * rate / 100);
-  return {items,subtotal,rate,savings,total:subtotal-savings};
-}
-
-function renderProducts(){
-  const query = $("search").value.trim().toLocaleLowerCase("fr");
-  let list = PRODUCTS.filter(p =>
-    (activeCategory === "all" || p.cat === activeCategory) &&
-    (`${p.name} ${p.desc}`).toLocaleLowerCase("fr").includes(query)
-  );
-
-  const sort = $("sort").value;
-  if(sort === "price-up") list.sort((a,b) => a.price-b.price);
-  if(sort === "price-down") list.sort((a,b) => b.price-a.price);
-
-  $("products").replaceChildren();
-  $("productCount").textContent = `${list.length} produit${list.length>1?"s":""}`;
-
-  if(!list.length){
-    const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.textContent = "Aucun produit trouvé. Essayez un autre mot-clé.";
-    $("products").append(empty);
-    return;
-  }
-
-  for(const product of list){
-    const chosen = cart.has(product.id);
-    const card = document.createElement("article");
-    card.className = `product${chosen?" selected":""}`;
-    card.innerHTML = `
-      <div class="product-art">
-        <span>${product.emoji}</span>
-        ${chosen?'<span class="selected-flag">Dans votre pack ✓</span>':""}
-      </div>
-      <div class="product-body">
-        <h3></h3><p></p>
-        <div class="price">${money(product.price)}</div>
-        <button class="add" type="button">${chosen?"Retirer du pack −":"Ajouter au pack +"}</button>
-      </div>`;
-
-    card.querySelector("h3").textContent = product.name;
-    card.querySelector("p").textContent = product.desc;
-    card.querySelector("button").addEventListener("click",()=>{
-      cart.has(product.id) ? cart.delete(product.id) : cart.add(product.id);
-      renderProducts();
-      renderCart();
-    });
-    $("products").append(card);
-  }
-}
-
-function renderCart(){
-  const t = totals();
-  $("cartbar").classList.toggle("show",t.items.length>0);
-  $("cartTotal").textContent = money(t.total);
-  $("cartInfo").textContent = `${t.items.length} produit${t.items.length>1?"s":""} · Sous-total ${money(t.subtotal)}`;
-  $("cartDiscount").textContent = t.rate
-    ? `Remise de ${t.rate}% : vous économisez ${money(t.savings)}`
-    : "Ajoutez 2 produits pour obtenir une remise";
-
-  document.querySelectorAll(".tier").forEach(element=>{
-    const tierRate = Number(element.querySelector("b").textContent.replace(/[^\d]/g,""));
-    element.classList.toggle("active",t.items.length>=Number(element.dataset.tier)&&discountRate(t.items.length)===tierRate);
-  });
-}
-
-function escapeHtml(value){
-  return value.replace(/[&<>"']/g,char=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[char]));
-}
-
-function openOrder(){
-  const t = totals();
-  if(!t.items.length) return;
-
-  $("orderLines").innerHTML = t.items.map(product=>`
-    <div class="order-line">
-      <span>${product.emoji} ${escapeHtml(product.name)}</span>
-      <strong>${money(product.price)}</strong>
-    </div>`).join("");
-
-  $("orderTotals").innerHTML = `
-    <div class="total-row"><span>Sous-total</span><strong>${money(t.subtotal)}</strong></div>
-    <div class="total-row"><span>Remise (${t.rate}%)</span><strong>−${money(t.savings)}</strong></div>
-    <div class="total-row grand"><span>Total produits</span><strong>${money(t.total)}</strong></div>
-    <div class="total-row"><span>Livraison</span><span>À confirmer</span></div>`;
-
-  $("formError").textContent = "";
-  $("overlay").classList.add("open");
-  document.body.style.overflow = "hidden";
-  $("customerName").focus();
-}
-
-function closeOrder(){
-  $("overlay").classList.remove("open");
-  document.body.style.overflow = "";
-}
-
-function sendOrder(){
-  const name = $("customerName").value.trim();
-  const phone = $("customerPhone").value.trim();
-  const city = $("customerCity").value.trim();
-  const address = $("customerAddress").value.trim();
-  const note = $("customerNote").value.trim();
-  const t = totals();
-
-  if(!t.items.length){
-    $("formError").textContent = "Votre pack est vide.";
-    return;
-  }
-
-  if(!name || !phone || !city || !address){
-    $("formError").textContent = "Merci de remplir votre nom, téléphone, ville et adresse.";
-    return;
-  }
-
-  if(phone.replace(/\D/g,"").length < 9){
-    $("formError").textContent = "Vérifiez votre numéro de téléphone.";
-    return;
-  }
-
-  const lines = [
-    `Bonjour ${SHOP.name}, je souhaite commander ce pack :`,
-    ...t.items.map(p=>`- ${p.name} : ${money(p.price)}`),
-    `Sous-total : ${money(t.subtotal)}`,
-    `Remise : ${t.rate}% (-${money(t.savings)})`,
-    `TOTAL produits : ${money(t.total)}`,
-    "Livraison : à confirmer",
-    "",
-    `Nom : ${name}`,
-    `Téléphone : ${phone}`,
-    `Ville : ${city}`,
-    `Adresse : ${address}`,
-    ...(note ? [`Remarque : ${note}`] : []),
-    "",
-    "Merci de confirmer la disponibilité, les frais de livraison et le total final avant expédition."
-  ];
-
-  const url = `https://wa.me/${SHOP.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`;
-  window.open(url,"_blank","noopener");
-}
-
-document.querySelectorAll(".cat").forEach(button=>{
-  button.addEventListener("click",()=>{
-    activeCategory = button.dataset.category;
-    document.querySelectorAll(".cat").forEach(category=>{
-      category.setAttribute("aria-pressed",String(category===button));
-    });
-    renderProducts();
-  });
+$("generate").onclick=generate;
+$("clear").onclick=()=>{$("product").value="";$("variants").value="";$("keywordOutput").innerHTML="";$("searchLinks").textContent="Génère d'abord les recherches ci-dessus.";keywords=[];currentProduct=""};
+$("recordForm").onsubmit=e=>{
+e.preventDefault();
+const url=$("url").value.trim();
+try{const u=new URL(url);if(!["http:","https:"].includes(u.protocol))throw Error()}catch(e){alert("Entre une URL valide commençant par http:// ou https://");return}
+records.push({
+id:Date.now().toString()+"-"+Math.random().toString(36).slice(2,8),
+product:currentProduct||$("product").value.trim(),
+seller:$("seller").value.trim(),platform:$("platform").value,type:$("type").value,
+url,price:$("price").value.trim(),currency:$("currency").value,
+confidence:$("confidence").value,notes:$("notes").value.trim(),
+city:$("city").value,category:$("category").value,
+createdAt:new Date().toISOString(),status:"A_VERIFIER"
 });
-
-$("search").addEventListener("input",renderProducts);
-$("sort").addEventListener("change",renderProducts);
-$("openOrder").addEventListener("click",openOrder);
-$("closeOrder").addEventListener("click",closeOrder);
-$("overlay").addEventListener("click",event=>{
-  if(event.target === $("overlay")) closeOrder();
-});
-$("sendOrder").addEventListener("click",sendOrder);
-document.addEventListener("keydown",event=>{
-  if(event.key === "Escape") closeOrder();
-});
-
-const whatsappURL = `https://wa.me/${SHOP.whatsapp}`;
-$("headerWa").href = whatsappURL;
-$("footerWa").href = whatsappURL;
-
-renderProducts();
-renderCart();
+save();render();e.target.reset();alert("Fiche enregistrée sur cet appareil.");
+};
+function download(name,data,type){
+const blob=new Blob([data],{type});
+const url=URL.createObjectURL(blob);const a=document.createElement("a");
+a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function readCoverage(){
+return{checked:[...document.querySelectorAll("#sourceChecks input:checked")].map(x=>x.value),notes:$("coverageNotes").value,updatedAt:new Date().toISOString()};
+}
+$("exportJson").onclick=()=>download("pack-robot1-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify({
+schema:"pack-competitor-research-v1",sourceRobot:"Robot 1",exportedAt:new Date().toISOString(),
+product:currentProduct||$("product").value.trim(),city:$("city").value,category:$("category").value,
+keywords,coverage:readCoverage(),competitors:records,
+limitations:"Les fiches ont été saisies manuellement. Vérifier les sources et les prix."
+},null,2),"application/json;charset=utf-8");
+$("exportCsv").onclick=()=>{
+const cols=["product","seller","platform","type","url","price","currency","confidence","notes","city","category","createdAt","status"];
+const csv=[cols,...records.map(r=>cols.map(c=>r[c]??""))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\r\n");
+download("pack-robot1.csv","\uFEFF"+csv,"text/csv;charset=utf-8");
+};
+$("importBtn").onclick=()=>$("importFile").click();
+$("importFile").onchange=async e=>{
+const file=e.target.files[0];if(!file)return;
+try{
+const obj=JSON.parse(await file.text());
+const incoming=Array.isArray(obj)?obj:obj.competitors;
+if(!Array.isArray(incoming))throw Error("Format invalide");
+const seen=new Set(records.map(r=>r.id));
+let added=0;
+incoming.forEach(r=>{if(r&&r.seller&&r.url&&!seen.has(r.id)){records.push({...r,id:r.id||Date.now()+"-"+Math.random()});added++}});
+save();render();alert(added+" fiche(s) importée(s).");
+}catch(err){alert("Import impossible : fichier JSON non reconnu.")}
+e.target.value="";
+};
+$("deleteAll").onclick=()=>{
+if(confirm("Supprimer toutes les fiches enregistrées dans ce navigateur ? Cette action est irréversible sans sauvegarde.")){records=[];save();render()}
+};
+function loadCoverage(){
+try{
+const c=JSON.parse(localStorage.getItem(COVER)||"null");
+if(!c)return;
+document.querySelectorAll("#sourceChecks input").forEach(x=>x.checked=(c.checked||[]).includes(x.value));
+$("coverageNotes").value=c.notes||"";
+$("coverageStatus").textContent="Dernier contrôle : "+(c.updatedAt||"date inconnue");
+}catch(e){}
+}
+$("saveCoverage").onclick=()=>{
+const c=readCoverage();localStorage.setItem(COVER,JSON.stringify(c));
+$("coverageStatus").textContent="Contrôle enregistré le "+c.updatedAt+". Sources cochées : "+c.checked.length+".";
+};
+loadCoverage();render();
+})();
 </script>
 </body>
 </html>
