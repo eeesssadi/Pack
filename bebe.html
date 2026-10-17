@@ -1,93 +1,767 @@
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pour mon bébé ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pack.ma — Robot 2 | Analyse concurrentielle</title>
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;min-height:100vh;
- font-family:Arial,sans-serif;
- color:#fff;text-align:center;
- background:linear-gradient(145deg,#240d25,#6d2049,#bd5277);
+:root {
+  color-scheme: dark;
+  --bg:#0b1020; --panel:#141c30; --panel2:#10182a;
+  --border:#2b3852; --text:#eef3ff; --muted:#a4b1c9;
+  --accent:#79a8ff; --green:#54d6a0; --red:#ff7c87;
 }
-header{padding:65px 18px 30px}
-h1{font-size:clamp(35px,9vw,60px);margin:15px 0}
-.subtitle{font-size:18px;line-height:1.7}
-.heart{font-size:75px;animation:pulse 1.5s infinite}
-@keyframes pulse{50%{transform:scale(1.15)}}
-.choices{display:flex;gap:16px;justify-content:center;
- flex-wrap:wrap;padding:20px}
-.choice{
- width:min(42%,190px);min-width:140px;
- padding:25px 12px;border:1px solid #ffffff55;
- border-radius:22px;background:#ffffff18;color:white;
- font-size:18px;cursor:pointer;
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;
 }
-.choice span{display:block;font-size:52px;margin-bottom:12px}
-#message{
- display:none;margin:20px auto;padding:25px;
- width:90%;max-width:520px;background:#fff1f6;
- color:#61213f;border-radius:22px;line-height:1.9;
- font-size:18px;
+header {
+  padding:25px 18px; border-bottom:1px solid var(--border);
+  background:linear-gradient(130deg,#162647,#10182a);
 }
-button:focus{outline:2px solid white}
-footer{padding:30px 15px;color:#ffe0ec}
+main {max-width:1250px;margin:auto;padding:20px;}
+h1 {margin:0 0 8px;font-size:clamp(23px,4vw,34px);}
+h2 {font-size:19px;margin:0 0 14px;}
+h3 {font-size:16px;margin:0 0 10px;}
+p {margin:7px 0;}
+small,.muted {color:var(--muted);}
+.layout {display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;}
+.panel {
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:14px;padding:17px;margin-bottom:16px;min-width:0;
+}
+label {display:block;font-size:13px;color:var(--muted);margin:10px 0 5px;}
+input,select,textarea {
+  width:100%;background:var(--panel2);color:var(--text);
+  border:1px solid var(--border);border-radius:8px;
+  padding:10px;font:inherit;min-width:0;
+}
+textarea {min-height:85px;resize:vertical;}
+button,.file-button {
+  border:1px solid var(--border);border-radius:9px;
+  padding:10px 13px;background:#223352;color:var(--text);
+  font:inherit;cursor:pointer;display:inline-flex;align-items:center;
+  justify-content:center;gap:6px;text-decoration:none;
+}
+button:hover,.file-button:hover {filter:brightness(1.2);}
+button.primary {background:#315ca5;border-color:#497acb;}
+button.good {background:#164b3d;border-color:#247a60;}
+button.danger {background:#552631;border-color:#82404c;}
+button:disabled {opacity:.45;cursor:not-allowed;}
+.actions {display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.stack {display:grid;gap:10px;}
+.two {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.three {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.stats {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px;}
+.stat {background:var(--panel2);border:1px solid var(--border);padding:13px;border-radius:10px;}
+.stat strong {display:block;font-size:25px;}
+.competitor {
+  padding:12px;border:1px solid var(--border);border-radius:10px;
+  margin-top:9px;cursor:pointer;overflow-wrap:anywhere;
+}
+.competitor.active {border-color:var(--accent);background:#1b2943;}
+.competitor small {display:block;}
+.badge {display:inline-block;padding:3px 7px;border-radius:6px;background:#27354d;font-size:11px;margin-top:5px;}
+.progress {height:8px;background:#263148;border-radius:10px;overflow:hidden;margin:8px 0;}
+.progress div {height:100%;width:0;background:var(--green);transition:width .2s;}
+.check {border:1px solid var(--border);border-radius:10px;padding:13px;margin:10px 0;}
+.check-head {display:flex;gap:10px;align-items:flex-start;}
+.check-number {background:#283b5b;border-radius:7px;padding:4px 8px;font-weight:700;}
+.check-title {font-weight:650;}
+.check-grid {display:grid;grid-template-columns:minmax(140px,.7fr) minmax(0,2fr);gap:12px;margin-top:10px;}
+hr {border:0;border-top:1px solid var(--border);margin:16px 0;}
+.notice {padding:12px;border-radius:9px;background:#182b40;border:1px solid #314d70;}
+.warning {background:#382a19;border-color:#6e5129;}
+.hidden {display:none!important;}
+footer {color:var(--muted);text-align:center;padding:25px 10px;}
+a {color:var(--accent);overflow-wrap:anywhere;}
+@media(max-width:800px) {
+ .layout {grid-template-columns:1fr;}
+ .three,.stats {grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media(max-width:520px) {
+ main {padding:12px;}
+ .panel {padding:13px;}
+ .two,.three {grid-template-columns:1fr;}
+ .check-grid {grid-template-columns:1fr;gap:5px;}
+ .actions button,.actions .file-button {flex:1;}
+}
 </style>
 </head>
 <body>
 <header>
- <div class="heart">❤️</div>
- <h1>Je t'aime mon bébé</h1>
- <p class="subtitle">
-  J'ai préparé un petit endroit rien que pour nous deux.<br>
-  Choisis une porte et découvre ce qu'il y a dans mon cœur.
- </p>
+  <div style="max-width:1250px;margin:auto">
+    <div class="muted">PACK.MA / VEILLE E-COMMERCE MAROC</div>
+    <h1>Robot 2 — Analyse concurrentielle</h1>
+    <p class="muted">Analyse les concurrents un par un, documente les preuves et prépare les décisions commerciales.</p>
+  </div>
 </header>
 
-<div class="choices">
- <button class="choice" onclick="ouvrir('coeur')">
-  <span>❤️</span>Le cœur
- </button>
- <button class="choice" onclick="ouvrir('cerveau')">
-  <span>🧠</span>Le cerveau
- </button>
-</div>
+<main>
+  <section class="panel">
+    <h2>1. Importer les concurrents du Robot 1</h2>
+    <p class="muted">Dans index.html, exporte tes concurrents en JSON puis importe ce fichier ici. Tu peux aussi ajouter un concurrent manuellement.</p>
+    <div class="actions">
+      <label class="file-button" style="margin:0">
+        Importer le JSON
+        <input id="importFile" type="file" accept=".json,application/json" style="display:none">
+      </label>
+      <button id="addBtn" class="primary">+ Ajouter un concurrent</button>
+      <button id="exportBtn">Exporter le rapport JSON</button>
+      <button id="csvBtn">Exporter le tableau CSV</button>
+    </div>
+    <p id="importMessage" class="muted" aria-live="polite"></p>
+    <div class="notice warning">
+      <strong>À savoir :</strong> ce robot est une interface d'analyse. Il ne récupère pas automatiquement les statistiques privées des concurrents. Les données doivent être recherchées et documentées manuellement.
+    </div>
+  </section>
 
-<div id="message"></div>
+  <div class="stats">
+    <div class="stat"><span class="muted">Concurrents</span><strong id="totalCount">0</strong></div>
+    <div class="stat"><span class="muted">Analyses terminées</span><strong id="doneCount">0</strong></div>
+    <div class="stat"><span class="muted">Contrôles renseignés</span><strong id="checksCount">0%</strong></div>
+  </div>
 
-<footer>
- Fait avec tout mon amour, pour toi ❤️
-</footer>
+  <div class="layout">
+    <aside>
+      <section class="panel">
+        <h2>2. Liste des concurrents</h2>
+        <label for="filterInput">Rechercher dans la liste</label>
+        <input id="filterInput" placeholder="Nom, vendeur, plateforme...">
+        <div id="competitorList"></div>
+        <p id="emptyList" class="muted">Aucun concurrent. Importe un JSON ou ajoute-en un.</p>
+      </section>
+      <section class="panel">
+        <h3>Sauvegarde et données</h3>
+        <p class="muted">Les modifications sont enregistrées dans le stockage local de ce navigateur.</p>
+        <div class="actions">
+          <button id="backupBtn">Télécharger une sauvegarde</button>
+          <button id="restoreBtn">Restaurer une sauvegarde</button>
+          <input id="restoreFile" type="file" accept=".json,application/json" class="hidden">
+        </div>
+        <hr>
+        <button id="deleteBtn" class="danger" disabled>Supprimer ce concurrent</button>
+        <p class="muted">Une sauvegarde JSON est recommandée avant de changer de navigateur ou d'effacer les données du navigateur.</p>
+      </section>
+    </aside>
+
+    <section>
+      <div id="noSelection" class="panel">
+        <h2>Commence par sélectionner un concurrent</h2>
+        <p class="muted">Tu pourras vérifier son identité, son offre, ses prix, sa publicité, son activité sociale et les informations disponibles sur son trafic.</p>
+      </div>
+
+      <div id="editor" class="hidden">
+        <section class="panel">
+          <h2>3. Fiche du concurrent</h2>
+          <div class="two">
+            <div><label for="seller">Nom du vendeur / entreprise</label><input id="seller" placeholder="Nom commercial"></div>
+            <div><label for="platform">Plateforme principale</label>
+              <select id="platform">
+                <option value="">À préciser</option>
+                <option>Site web</option><option>Facebook</option><option>Instagram</option>
+                <option>TikTok</option><option>Marketplace</option><option>YouTube</option><option>Autre</option>
+              </select>
+            </div>
+          </div>
+          <div class="two">
+            <div><label for="url">URL principale</label><input id="url" type="url" placeholder="https://..."></div>
+            <div><label for="product">Produit / modèle</label><input id="product" placeholder="Produit étudié"></div>
+          </div>
+          <div class="two">
+            <div><label for="city">Villes / zones couvertes</label><input id="city" placeholder="Casablanca, Mohammedia..."></div>
+            <div><label for="price">Prix constaté et devise</label><input id="price" placeholder="Ex. 149 MAD, observé le..."></div>
+          </div>
+          <div class="two">
+            <div><label for="identity">Identité / type de concurrence</label>
+              <select id="identity">
+                <option value="A_VERIFIER">À vérifier</option>
+                <option value="DIRECT">Direct</option>
+                <option value="INDIRECT">Indirect</option>
+                <option value="NON_CONCURRENT">Pas un concurrent confirmé</option>
+              </select>
+            </div>
+            <div><label for="reviewDate">Date de l'analyse</label><input id="reviewDate" type="date"></div>
+          </div>
+          <label for="overview">Résumé et observations générales</label>
+          <textarea id="overview" placeholder="Ce qui est constaté, sans supposition présentée comme un fait."></textarea>
+        </section>
+
+        <section class="panel">
+          <h2>4. Contrôles obligatoires</h2>
+          <p class="muted">Pour chaque contrôle, choisis un statut et consigne les preuves, les liens, les dates ou les limites rencontrées.</p>
+          <div class="progress"><div id="progressBar"></div></div>
+          <p id="progressText" class="muted">0 / 12 contrôles renseignés</p>
+          <div id="checksContainer"></div>
+        </section>
+
+        <section class="panel">
+          <h2>5. Synthèse stratégique pour Pack.ma</h2>
+          <label for="strengths">Forces du concurrent — preuves à l'appui</label>
+          <textarea id="strengths" placeholder="Ex. gamme claire, offre vérifiée, livraison documentée..."></textarea>
+          <label for="weaknesses">Faiblesses ou limites observées</label>
+          <textarea id="weaknesses" placeholder="Distingue les faits de tes hypothèses."></textarea>
+          <label for="opportunities">Opportunités pour Pack.ma</label>
+          <textarea id="opportunities" placeholder="Offre à tester, différenciation, pack, contenu..."></textarea>
+          <label for="ideas">Actions à tester et prochaines étapes</label>
+          <textarea id="ideas" placeholder="Action, priorité, coût éventuel à valider avant toute dépense."></textarea>
+          <label for="finalNotes">Conclusion et niveau de confiance</label>
+          <textarea id="finalNotes" placeholder="Ce que l'on sait, ce que l'on ne sait pas et ce qu'il faut vérifier ensuite."></textarea>
+          <div class="actions">
+            <button id="saveBtn" class="primary">Enregistrer la fiche</button>
+            <button id="openUrlBtn">Ouvrir le site du concurrent</button>
+          </div>
+          <p id="saveMessage" class="muted" aria-live="polite"></p>
+        </section>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>Pack.ma · Outil local de veille concurrentielle · Les faits doivent rester traçables.</footer>
 
 <script>
-function ouvrir(type){
- const m=document.getElementById('message');
- m.style.display='block';
- if(type==='coeur'){
-  m.innerHTML=`
-  <h2>❤️ Tout l'amour que j'ai pour toi</h2>
-  💋 Les bisous que je veux te donner.<br>
-  🫂 Les câlins dans lesquels je veux rester.<br>
-  🥰 Les petites attentions et les gâtés.<br>
-  💞 Ta main dans la mienne.<br>
-  😘 Les moments où je te serre contre moi.<br><br>
-  <strong>Mon cœur te choisit, encore et encore.</strong>`;
- }else{
-  m.innerHTML=`
-  <h2>🧠 Tout ce que je veux vivre avec toi</h2>
-  🤍 Ta présence, même dans les jours difficiles.<br>
-  🏡 Être ensemble, partager notre quotidien.<br>
-  😂 Faire des conneries et rire comme deux idiots.<br>
-  🫶 Se soutenir et se comprendre.<br>
-  🌍 Créer nos souvenirs et nos petits délires.<br><br>
-  <strong>Je ne veux pas seulement t'aimer : je veux vivre plein de choses avec toi.</strong>`;
- }
- m.scrollIntoView({behavior:'smooth',block:'center'});
+"use strict";
+
+const STORAGE_KEY = "packma_robot2_v1";
+
+const CHECKS = [
+  {
+    id:"identity", title:"Identité et comptes associés",
+    help:"Nom de l'entreprise, comptes officiels, liens entre les profils et niveau de certitude.",
+    placeholder:"Liens des comptes, éléments qui confirment ou non qu'ils appartiennent au même vendeur..."
+  },
+  {
+    id:"products", title:"Produit exact, modèles et alternatives",
+    help:"Référence, caractéristiques, variantes, différences entre le produit observé et le produit étudié.",
+    placeholder:"Référence exacte, captures ou pages produit, alternatives comparables..."
+  },
+  {
+    id:"presence", title:"Présence au Maroc, villes et livraison",
+    help:"Zone de livraison annoncée, délais, paiement à la livraison, conditions et frais.",
+    placeholder:"Villes confirmées, conditions de livraison, URL et date de consultation..."
+  },
+  {
+    id:"pricing", title:"Prix, promotions, packs et frais",
+    help:"Prix réellement affiché, devise, réduction, prix barré, packs, livraison et éventuels frais.",
+    placeholder:"Prix observé, devise, date, promotion, frais et lien source..."
+  },
+  {
+    id:"traffic", title:"Trafic estimé sur les trois derniers mois",
+    help:"Visites estimées, outil utilisé, période, géographie et limites. Ne pas inventer les chiffres.",
+    placeholder:"Outil, URL du rapport, période exacte, pays, estimation ou raison de l'indisponibilité..."
+  },
+  {
+    id:"acquisition", title:"Canaux d'acquisition",
+    help:"SEO, publicités, réseaux sociaux, influenceurs, affiliation, marketplace et autres canaux.",
+    placeholder:"Canal observé, preuve, URL et date..."
+  },
+  {
+    id:"ads", title:"Publicités visibles et pages de destination",
+    help:"Bibliothèque publicitaire, créations, dates visibles, texte, offre et landing page.",
+    placeholder:"Lien de la publicité, plateforme, date observée, texte et destination..."
+  },
+  {
+    id:"social", title:"Activité sociale et engagement",
+    help:"Fréquence de publication, vues ou interactions visibles, période observée et contexte.",
+    placeholder:"Compte, période d'observation, nombre de publications et indicateurs visibles..."
+  },
+  {
+    id:"positioning", title:"Positionnement, promesse et cible",
+    help:"Promesse de vente, bénéfice annoncé, audience visée et différenciation revendiquée.",
+    placeholder:"Messages réellement utilisés, exemples, liens et hypothèses séparées..."
+  },
+  {
+    id:"creative", title:"Contenus et formats créatifs",
+    help:"Vidéos, démonstrations, témoignages, visuels, angles publicitaires et appels à l'action.",
+    placeholder:"Exemples, liens, formats, angle et date..."
+  },
+  {
+    id:"swot", title:"Forces, faiblesses et opportunités",
+    help:"Synthèse argumentée. Chaque conclusion importante doit renvoyer à une observation.",
+    placeholder:"Faits observés, déductions raisonnables, incertitudes et opportunités..."
+  },
+  {
+    id:"sources", title:"Sources, dates et contradictions",
+    help:"Liste des sources consultées, dates, informations contradictoires et contrôles encore nécessaires.",
+    placeholder:"URLs, dates de consultation, contradictions et prochaine vérification..."
+  }
+];
+
+const STATUSES = [
+  ["NON_EXECUTE","Non exécuté"],
+  ["VERIFIE","Vérifié"],
+  ["ESTIME","Estimé"],
+  ["INTROUVABLE","Introuvable"],
+  ["INACCESSIBLE","Inaccessible"],
+  ["A_VERIFIER","À vérifier"]
+];
+
+const $ = id => document.getElementById(id);
+let competitors = [];
+let selectedId = null;
+let saveTimer = null;
+
+function uid() {
+  return "cmp_" + Date.now().toString(36) + "_" +
+    Math.random().toString(36).slice(2,9);
 }
+
+function today() {
+  return new Date().toISOString().slice(0,10);
+}
+
+function normalizeCompetitor(raw) {
+  const c = raw && typeof raw === "object" ? raw : {};
+  const name = String(c.seller || c.name || c.competitor ||
+    c.title || c.business || "").trim();
+  const url = String(c.url || c.website || c.link || "").trim();
+  const checks = {};
+
+  CHECKS.forEach(def => {
+    const previous = c.checks && c.checks[def.id];
+    checks[def.id] = {
+      status: STATUSES.some(s => s[0] === previous?.status)
+        ? previous.status : "NON_EXECUTE",
+      notes: String(previous?.notes || "")
+    };
+  });
+
+  return {
+    id: String(c.id || uid()),
+    seller: name || "Concurrent sans nom",
+    platform: String(c.platform || ""),
+    url,
+    product: String(c.product || c.productName || c.query || ""),
+    city: String(c.city || c.location || ""),
+    price: String(c.price || ""),
+    identity: String(c.identity || "A_VERIFIER"),
+    reviewDate: String(c.reviewDate || today()),
+    overview: String(c.overview || c.notes || c.observations || ""),
+    checks,
+    strengths: String(c.strengths || ""),
+    weaknesses: String(c.weaknesses || ""),
+    opportunities: String(c.opportunities || ""),
+    ideas: String(c.ideas || ""),
+    finalNotes: String(c.finalNotes || ""),
+    importedData: c
+  };
+}
+
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      competitors = parsed.map(normalizeCompetitor);
+    } else if (Array.isArray(parsed.competitors)) {
+      competitors = parsed.competitors.map(normalizeCompetitor);
+    }
+  } catch (e) {
+    console.warn("Impossible de charger la sauvegarde locale.", e);
+  }
+}
+
+function persist() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      app:"Pack.ma Robot 2",
+      version:1,
+      savedAt:new Date().toISOString(),
+      competitors
+    }));
+    return true;
+  } catch (e) {
+    alert("La sauvegarde locale a échoué. Télécharge un rapport JSON pour conserver tes données.");
+    return false;
+  }
+}
+
+function selected() {
+  return competitors.find(c => c.id === selectedId) || null;
+}
+
+function countChecks(c) {
+  return CHECKS.filter(def =>
+    c.checks[def.id] &&
+    c.checks[def.id].status !== "NON_EXECUTE"
+  ).length;
+}
+
+function isComplete(c) {
+  return countChecks(c) === CHECKS.length;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[ch]);
+}
+
+function safeUrl(value) {
+  try {
+    const u = new URL(value);
+    return ["http:","https:"].includes(u.protocol) ? u.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function renderStats() {
+  $("totalCount").textContent = competitors.length;
+  $("doneCount").textContent = competitors.filter(isComplete).length;
+  const total = competitors.length * CHECKS.length;
+  const completed = competitors.reduce((sum,c) => sum + countChecks(c),0);
+  $("checksCount").textContent = total ? Math.round(completed/total*100) + "%" : "0%";
+}
+
+function renderList() {
+  const filter = $("filterInput").value.trim().toLowerCase();
+  const list = $("competitorList");
+  list.innerHTML = "";
+  const visible = competitors.filter(c =>
+    [c.seller,c.platform,c.url,c.product,c.city]
+      .join(" ").toLowerCase().includes(filter)
+  );
+
+  $("emptyList").classList.toggle("hidden", visible.length > 0);
+
+  visible.forEach(c => {
+    const item = document.createElement("div");
+    item.className = "competitor" + (c.id === selectedId ? " active" : "");
+    const n = countChecks(c);
+    item.innerHTML = `
+      <strong>${escapeHtml(c.seller)}</strong>
+      <small>${escapeHtml(c.platform || "Plateforme à préciser")}</small>
+      <small>${n}/${CHECKS.length} contrôles renseignés</small>
+      <div class="progress"><div style="width:${n/CHECKS.length*100}%"></div></div>
+      <span class="badge">${isComplete(c) ? "Contrôles terminés" : "Analyse en cours"}</span>`;
+    item.addEventListener("click", () => {
+      saveCurrent(false);
+      selectedId = c.id;
+      renderAll();
+    });
+    list.appendChild(item);
+  });
+
+  renderStats();
+  $("deleteBtn").disabled = !selected();
+}
+
+function renderChecks(c) {
+  $("checksContainer").innerHTML = CHECKS.map((def,index) => {
+    const record = c.checks[def.id] || {status:"NON_EXECUTE",notes:""};
+    const options = STATUSES.map(([value,label]) =>
+      `<option value="${value}" ${record.status===value?"selected":""}>${label}</option>`
+    ).join("");
+
+    return `
+      <div class="check" data-check="${def.id}">
+        <div class="check-head">
+          <span class="check-number">${index+1}</span>
+          <div>
+            <div class="check-title">${escapeHtml(def.title)}</div>
+            <small>${escapeHtml(def.help)}</small>
+          </div>
+        </div>
+        <div class="check-grid">
+          <div>
+            <label for="status_${def.id}">Statut du contrôle</label>
+            <select id="status_${def.id}" data-status="${def.id}">${options}</select>
+          </div>
+          <div>
+            <label for="notes_${def.id}">Preuves, source, date et observations</label>
+            <textarea id="notes_${def.id}" data-notes="${def.id}" placeholder="${escapeHtml(def.placeholder)}">${escapeHtml(record.notes)}</textarea>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+
+  $("checksContainer").querySelectorAll("[data-status]").forEach(el => {
+    el.addEventListener("change", () => {
+      syncChecksFromUI(c);
+      updateProgress(c);
+      scheduleSave();
+    });
+  });
+
+  $("checksContainer").querySelectorAll("[data-notes]").forEach(el => {
+    el.addEventListener("input", () => {
+      syncChecksFromUI(c);
+      scheduleSave();
+    });
+  });
+}
+
+function syncChecksFromUI(c) {
+  CHECKS.forEach(def => {
+    const status = $("status_" + def.id);
+    const notes = $("notes_" + def.id);
+    if (status && notes) {
+      c.checks[def.id] = {
+        status:status.value,
+        notes:notes.value
+      };
+    }
+  });
+}
+
+function updateProgress(c) {
+  const n = countChecks(c);
+  $("progressBar").style.width = (n/CHECKS.length*100) + "%";
+  $("progressText").textContent =
+    `${n} / ${CHECKS.length} contrôles renseignés` +
+    (n===CHECKS.length ? " — Tous les contrôles ont un statut." :
+      " — Certains contrôles n'ont pas encore de statut final.");
+  renderStats();
+  renderList();
+}
+
+const FIELDS = [
+  "seller","platform","url","product","city","price","identity",
+  "reviewDate","overview","strengths","weaknesses","opportunities",
+  "ideas","finalNotes"
+];
+
+function readFieldsInto(c) {
+  FIELDS.forEach(field => {
+    const el = $(field);
+    if (el) c[field] = el.value;
+  });
+  syncChecksFromUI(c);
+}
+
+function saveCurrent(showMessage=true) {
+  const c = selected();
+  if (!c) return;
+  readFieldsInto(c);
+  const ok = persist();
+  renderStats();
+  renderList();
+  updateProgress(c);
+  if (showMessage) {
+    $("saveMessage").textContent = ok
+      ? "Fiche enregistrée dans ce navigateur."
+      : "Échec de la sauvegarde locale. Exporte un JSON.";
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveCurrent(false),250);
+}
+
+function renderEditor(c) {
+  $("noSelection").classList.toggle("hidden", !!c);
+  $("editor").classList.toggle("hidden", !c);
+  $("deleteBtn").disabled = !c;
+  if (!c) return;
+
+  FIELDS.forEach(field => {
+    if ($(field)) $(field).value = c[field] ?? "";
+  });
+  renderChecks(c);
+  updateProgress(c);
+  $("saveMessage").textContent = "";
+}
+
+function renderAll() {
+  renderList();
+  renderEditor(selected());
+}
+
+function addCompetitor(raw={}) {
+  const c = normalizeCompetitor(raw);
+  if (!raw.seller && !raw.name) c.seller = "Nouveau concurrent";
+  competitors.unshift(c);
+  selectedId = c.id;
+  persist();
+  renderAll();
+}
+
+function downloadFile(filename, content, mime) {
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url),1000);
+}
+
+function exportJSON() {
+  saveCurrent(false);
+  const payload = {
+    app:"Pack.ma Robot 2",
+    version:1,
+    exportedAt:new Date().toISOString(),
+    methodology:{
+      completion:"Un contrôle est renseigné lorsque son statut est différent de NON_EXECUTE.",
+      statuses:STATUSES.map(s=>s[0]),
+      warning:"Les estimations ne sont pas des mesures vérifiées."
+    },
+    competitors
+  };
+  downloadFile("packma-rapport-concurrentiel.json",
+    JSON.stringify(payload,null,2),"application/json;charset=utf-8");
+}
+
+function csvEscape(value) {
+  return '"' + String(value ?? "").replace(/"/g,'""') + '"';
+}
+
+function exportCSV() {
+  saveCurrent(false);
+  const columns = [
+    "seller","platform","url","product","city","price","identity",
+    "reviewDate","overview",
+    ...CHECKS.flatMap(def=>[
+      def.id+"_status",def.id+"_notes"
+    ]),
+    "strengths","weaknesses","opportunities","ideas","finalNotes",
+    "checks_completed","checks_total","complete"
+  ];
+
+  const rows = competitors.map(c => {
+    const row = {
+      ...c,
+      checks_completed:countChecks(c),
+      checks_total:CHECKS.length,
+      complete:isComplete(c) ? "OUI" : "NON"
+    };
+    CHECKS.forEach(def => {
+      row[def.id+"_status"] = c.checks[def.id]?.status || "NON_EXECUTE";
+      row[def.id+"_notes"] = c.checks[def.id]?.notes || "";
+    });
+    return columns.map(col => csvEscape(row[col])).join(";");
+  });
+
+  const content = "\uFEFF" + columns.map(csvEscape).join(";") + "\r\n" +
+    rows.join("\r\n");
+  downloadFile("packma-rapport-concurrentiel.csv",content,"text/csv;charset=utf-8");
+}
+
+function getCompetitorArray(parsed) {
+  if (Array.isArray(parsed)) return parsed;
+  if (parsed && Array.isArray(parsed.competitors)) return parsed.competitors;
+  if (parsed && Array.isArray(parsed.results)) return parsed.results;
+  if (parsed && Array.isArray(parsed.items)) return parsed.items;
+  throw new Error("Format JSON non reconnu : aucune liste de concurrents trouvée.");
+}
+
+function importJSON(file, mode="merge") {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(reader.result);
+      const incoming = getCompetitorArray(parsed);
+      if (!incoming.length) {
+        $("importMessage").textContent = "Le fichier ne contient aucun concurrent.";
+        return;
+      }
+
+      const normalized = incoming.map(normalizeCompetitor);
+      if (mode === "replace") {
+        if (!confirm("Remplacer toutes les fiches actuelles par la sauvegarde importée ?")) return;
+        competitors = normalized;
+      } else {
+        const existingKeys = new Set(competitors.map(c =>
+          (c.url || "").toLowerCase() + "|" + c.seller.toLowerCase()
+        ));
+        let added = 0;
+        normalized.forEach(c => {
+          const key = (c.url || "").toLowerCase() + "|" + c.seller.toLowerCase();
+          if (!existingKeys.has(key)) {
+            competitors.push(c);
+            existingKeys.add(key);
+            added++;
+          }
+        });
+        $("importMessage").textContent =
+          `${added} concurrent(s) ajouté(s). Les fiches déjà présentes ont été ignorées.`;
+      }
+
+      if (!selected() && competitors.length) selectedId = competitors[0].id;
+      if (selected() === null && competitors.length) selectedId = competitors[0].id;
+      persist();
+      renderAll();
+      if (mode === "replace") {
+        $("importMessage").textContent = `${competitors.length} fiche(s) restaurée(s).`;
+      }
+    } catch (e) {
+      $("importMessage").textContent = "Import impossible : " + e.message;
+    } finally {
+      $("importFile").value = "";
+      $("restoreFile").value = "";
+    }
+  };
+  reader.readAsText(file);
+}
+
+$("importFile").addEventListener("change", e => importJSON(e.target.files[0],"merge"));
+$("restoreBtn").addEventListener("click", () => $("restoreFile").click());
+$("restoreFile").addEventListener("change", e => importJSON(e.target.files[0],"replace"));
+$("addBtn").addEventListener("click", () => addCompetitor());
+$("exportBtn").addEventListener("click", exportJSON);
+$("csvBtn").addEventListener("click", exportCSV);
+$("filterInput").addEventListener("input", renderList);
+$("saveBtn").addEventListener("click", () => saveCurrent(true));
+
+$("backupBtn").addEventListener("click", () => {
+  saveCurrent(false);
+  downloadFile("packma-robot2-sauvegarde.json",
+    JSON.stringify({
+      app:"Pack.ma Robot 2",
+      version:1,
+      savedAt:new Date().toISOString(),
+      competitors
+    },null,2),
+    "application/json;charset=utf-8");
+});
+
+$("deleteBtn").addEventListener("click", () => {
+  const c = selected();
+  if (!c) return;
+  if (!confirm(`Supprimer la fiche « ${c.seller} » de ce navigateur ?`)) return;
+  competitors = competitors.filter(item=>item.id!==c.id);
+  selectedId = competitors.length ? competitors[0].id : null;
+  persist();
+  renderAll();
+});
+
+$("openUrlBtn").addEventListener("click", () => {
+  const c = selected();
+  if (!c) return;
+  const url = safeUrl(c.url);
+  if (!url) {
+    alert("Ajoute une URL valide commençant par https:// ou http://.");
+    return;
+  }
+  window.open(url,"_blank","noopener,noreferrer");
+});
+
+FIELDS.forEach(field => {
+  const el = $(field);
+  if (!el) return;
+  el.addEventListener("input", scheduleSave);
+  el.addEventListener("change", scheduleSave);
+});
+
+window.addEventListener("beforeunload", () => {
+  const c = selected();
+  if (c) readFieldsInto(c);
+  persist();
+});
+
+loadLocal();
+if (competitors.length) selectedId = competitors[0].id;
+renderAll();
 </script>
 </body>
 </html>
