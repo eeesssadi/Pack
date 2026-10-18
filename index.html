@@ -1,275 +1,181 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pack.ma — Robot 1</title>
 <style>
-:root{color-scheme:dark;--bg:#0b1020;--panel:#151e30;--line:#34415a;--text:#f4f7ff;--muted:#a8b5cc;--green:#75e5c0}
+:root{color-scheme:dark;--bg:#0b1020;--p:#151e30;--l:#34415a;--t:#f4f7ff;--m:#a8b5cc;--g:#75e5c0;--b:#8eb6ff}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Arial,sans-serif}
-header{padding:25px 18px;background:#13283a;border-bottom:1px solid var(--line)}
-main{max-width:1000px;margin:auto;padding:18px}
-header>div{max-width:1000px;margin:auto}
-h1{font-size:clamp(25px,5vw,36px);margin:8px 0}
-h2{font-size:19px;margin-top:0}
-p,.muted{color:var(--muted)}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:16px}
-label{display:block;margin:12px 0 5px;font-weight:bold;font-size:13px}
-input,select,textarea{width:100%;padding:11px;background:#0c1424;color:var(--text);border:1px solid var(--line);border-radius:8px;font:inherit}
-textarea{min-height:80px}
+body{margin:0;background:var(--bg);color:var(--t);font:15px/1.5 system-ui,Arial}
+header{padding:24px 18px;background:#13283a;border-bottom:1px solid var(--l)}
+header>div,main{max-width:1050px;margin:auto}
+main{padding:18px}
+h1{font-size:clamp(25px,5vw,36px);margin:5px 0}
+h2{font-size:19px;margin:0 0 12px}
+p,small{color:var(--m)}
+.card{background:var(--p);border:1px solid var(--l);border-radius:13px;padding:18px;margin-bottom:16px}
+label{display:block;margin:11px 0 5px;font-weight:650;font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-button{padding:11px 14px;border-radius:8px;border:1px solid var(--line);background:#24324a;color:var(--text);font-weight:bold;cursor:pointer}
-button.primary{background:var(--green);color:#09221b;border-color:var(--green)}
-button.danger{background:#4a202a}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.links a{color:var(--green);background:#202d42;border:1px solid var(--line);padding:12px;border-radius:8px;text-decoration:none}
-.keywords{display:flex;flex-wrap:wrap;gap:7px}
-.keyword,.tag{background:#24334a;border-radius:6px;padding:6px 8px;font-size:12px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#202d42;padding:12px;border-radius:8px}
-.stat strong{display:block;color:var(--green);font-size:23px}
-.item{padding:14px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
-.item a{color:var(--green)}
-.notice{padding:12px;border-left:3px solid var(--green);background:#142a2b;color:#d5f6ec}
-small{color:var(--muted)}
-@media(max-width:600px){.grid,.links{grid-template-columns:1fr}main{padding:10px}.card{padding:14px}}
+input,select,textarea{width:100%;padding:11px;background:#0c1424;color:var(--t);border:1px solid var(--l);border-radius:8px;font:inherit}
+textarea{min-height:80px}
+button,.btn{padding:10px 13px;border-radius:8px;border:1px solid var(--l);background:#24324a;color:white;cursor:pointer;font:inherit;text-decoration:none;display:inline-block}
+button.primary{background:#17634e;border-color:#27856a}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.pill{font-size:12px;border:1px solid var(--l);border-radius:99px;padding:3px 8px;color:var(--m)}
+.links{display:flex;gap:7px;flex-wrap:wrap}
+.links a{font-size:13px;color:var(--b);border:1px solid var(--l);border-radius:7px;padding:5px 8px;text-decoration:none}
+.result{border:1px solid var(--l);border-radius:10px;padding:12px;margin-top:10px}
+.notice{background:#1d2b40;border-radius:8px;padding:10px;margin:10px 0}
+.ok{color:var(--g)}.error{color:#ff9a9a}.hide{display:none}
+@media(max-width:650px){.grid{grid-template-columns:1fr}main{padding:12px}}
 </style>
 </head>
 <body>
-<header>
-<div>
-<div style="color:#75e5c0;font-weight:bold;letter-spacing:2px">PACK.MA · INTELLIGENCE COMMERCIALE</div>
-<h1>Robot 1 — Recherche de concurrents</h1>
-<p>Recherche de vendeurs, prix et offres pour le marché marocain.</p>
-<span class="tag">Français</span> <span class="tag">العربية</span> <span class="tag">Darija</span> <span class="tag">English</span>
-</div>
-</header>
+<header><div>
+<span class="pill">PACK.MA · ROBOT 1 / 10 ÉTAGES</span>
+<h1>Recherche de concurrents</h1>
+<p>Mots-clés produit FR/EN/AR, recherche, collecte indicative de pages publiques et synchronisation avec Robot 2.</p>
+</div></header>
 <main>
 <section class="card">
-<h2>1. Produit à rechercher</h2>
-<label for="product">Nom du produit *</label>
-<input id="product" placeholder="Ex. organisateur de cuisine">
+<h2>1. Créer une étude produit</h2>
 <div class="grid">
-<div><label for="city">Zone géographique</label>
-<select id="city"><option>Maroc</option><option>Casablanca</option><option>Mohammedia</option><option>Rabat</option><option>Marrakech</option><option>Tanger</option><option>Fès</option><option>Agadir</option></select></div>
-<div><label for="category">Catégorie</label>
-<select id="category"><option>Cuisine et maison</option><option>Voiture</option><option>Maman et bébé</option><option>Sport</option><option>Beauté</option><option>Électronique</option><option>Autre</option></select></div>
+<div><label for="product">Produit *</label><input id="product" placeholder="Ex. mini hachoir électrique"></div>
+<div><label for="market">Marché</label><input id="market" value="Maroc"></div>
 </div>
-<label for="variants">Synonymes, marques et variantes (un par ligne)</label>
-<textarea id="variants" placeholder="Nom alternatif&#10;Marque ou référence&#10;Nom en arabe si connu"></textarea>
-<div class="actions"><button class="primary" id="generate">Générer les mots-clés et les liens</button><button id="clear">Effacer</button></div>
-<div id="keywordOutput"></div>
+<label for="variants">Variantes et synonymes (un par ligne)</label>
+<textarea id="variants" placeholder="hachoir rechargeable&#10;mini blender&#10;hachoir à ail"></textarea>
+<div class="row" style="margin-top:12px">
+<button class="primary" id="create">Créer l'étude</button>
+<button id="reload">Recharger</button>
+<a class="btn" href="bebe.html">Ouvrir Robot 2 →</a>
+</div>
+<div id="message" class="notice hide"></div>
 </section>
-
 <section class="card">
-<h2>2. Rechercher sur les plateformes</h2>
-<p>Les liens ci-dessous ouvrent les recherches sur les sources publiques. Tu devras examiner les résultats et enregistrer les vendeurs pertinents.</p>
-<div id="searchLinks" class="links">Génère d'abord les recherches ci-dessus.</div>
+<h2>2. Étude active et mots-clés</h2>
+<label for="study">Étude partagée</label>
+<select id="study"><option value="">Chargement…</option></select>
+<div id="summary"></div>
+<div id="keywords" class="links"></div>
+<p>Les mots-clés sont générés en français, anglais et arabe. Vérifie les résultats avant de retenir un concurrent.</p>
 </section>
-
 <section class="card">
-<h2>3. Ajouter un concurrent trouvé</h2>
-<form id="recordForm">
-<label for="seller">Nom du vendeur ou de la boutique *</label>
-<input id="seller" required placeholder="Nom de la boutique">
-<div class="grid">
-<div><label for="platform">Plateforme</label>
-<select id="platform"><option>Site marchand</option><option>Google</option><option>Facebook</option><option>Instagram</option><option>TikTok</option><option>YouTube</option><option>Marketplace</option><option>Grossiste</option><option>Autre</option></select></div>
-<div><label for="type">Type de concurrent</label>
-<select id="type"><option>À vérifier</option><option>Direct</option><option>Indirect</option><option>Grossiste / fournisseur potentiel</option></select></div>
+<h2>3. Rechercher des concurrents</h2>
+<div id="searchLinks" class="links"></div>
+<div class="grid" style="margin-top:14px">
+<div><label for="name">Nom du concurrent *</label><input id="name" placeholder="Nom de la boutique"></div>
+<div><label for="url">URL publique</label><input id="url" type="url" placeholder="https://boutique.ma"></div>
 </div>
-<label for="url">URL de la page du vendeur ou du produit *</label>
-<input id="url" type="url" required placeholder="https://...">
-<div class="grid">
-<div><label for="price">Prix affiché</label><input id="price" placeholder="Ex. 149"></div>
-<div><label for="currency">Devise</label><select id="currency"><option>MAD</option><option>EUR</option><option>USD</option><option>Non indiquée</option><option>Autre</option></select></div>
-</div>
-<label for="confidence">État de vérification</label>
-<select id="confidence"><option>A_VERIFIER</option><option>VERIFIE</option><option>PARTIELLEMENT_VERIFIE</option></select>
-<label for="notes">Observations</label>
-<textarea id="notes" placeholder="Prix, livraison, promotion, ville, modèle, date..."></textarea>
-<div class="actions"><button class="primary" type="submit">Enregistrer le concurrent</button></div>
-</form>
+<div class="row" style="margin-top:12px"><button class="primary" id="add">Ajouter à l'étude</button></div>
+<div id="competitors"></div>
 </section>
-
 <section class="card">
-<h2>4. Résultats enregistrés</h2>
-<div class="stats">
-<div class="stat"><strong id="total">0</strong><small>Concurrents</small></div>
-<div class="stat"><strong id="verified">0</strong><small>Déclarés vérifiés</small></div>
-<div class="stat"><strong id="priced">0</strong><small>Prix renseignés</small></div>
-</div>
-<div class="actions">
-<button class="primary" id="exportJson">Exporter pour Robot 2 (JSON)</button>
-<button id="exportCsv">Exporter en CSV</button>
-<button id="importBtn">Importer une sauvegarde</button>
-<input type="file" id="importFile" accept=".json,application/json" hidden>
-<button class="danger" id="deleteAll">Supprimer toutes les fiches</button>
-</div>
-<p><small>Les données restent dans ce navigateur. Exporte une sauvegarde pour les transférer sur un autre appareil ou les envoyer au Robot 2.</small></p>
-<div id="records"></div>
+<h2>Les 10 étages de Robot 1</h2>
+<ol>
+<li>Configuration de l'étude produit</li>
+<li>Mots-clés FR/EN/AR et variantes</li>
+<li>Liens de recherche par plateforme</li>
+<li>Identification du concurrent et comptes publics</li>
+<li>Extraction indicative de page publique</li>
+<li>Repérage des publicités visibles</li>
+<li>Métriques sociales publiées</li>
+<li>Sources, dates et contrôle qualité</li>
+<li>Fiche concurrent normalisée</li>
+<li>Synchronisation avec Robot 2</li>
+</ol>
+<p>Les liens de recherche ne sont pas une API automatique. Certaines pages bloquent l'extraction. Le trafic et les métriques non publiés doivent être vérifiés ou saisis manuellement.</p>
 </section>
-
-<section class="card">
-<h2>5. Contrôle des sources examinées</h2>
-<p>Coche uniquement les sources que tu as réellement consultées pour ce produit.</p>
-<div id="sourceChecks">
-<label><input type="checkbox" value="Google"> Google et sites web</label>
-<label><input type="checkbox" value="Bing"> Bing</label>
-<label><input type="checkbox" value="Facebook"> Facebook</label>
-<label><input type="checkbox" value="Instagram"> Instagram</label>
-<label><input type="checkbox" value="TikTok"> TikTok</label>
-<label><input type="checkbox" value="YouTube"> YouTube</label>
-<label><input type="checkbox" value="Meta Ad Library"> Meta Ad Library</label>
-<label><input type="checkbox" value="Marketplaces"> Boutiques et marketplaces</label>
-</div>
-<label for="coverageNotes">Sources bloquées ou remarques</label>
-<textarea id="coverageNotes" placeholder="Ex. compte privé, page inaccessible, recherche sans résultat pertinent..."></textarea>
-<div class="actions"><button id="saveCoverage">Enregistrer le contrôle</button></div>
-<p id="coverageStatus" class="muted"></p>
-</section>
-
-<div class="notice"><strong>Transparence :</strong> cette version prépare les recherches et conserve les fiches saisies. Elle ne collecte pas automatiquement tout Internet, n'accède pas aux comptes privés et ne connaît pas le trafic réel des concurrents sans source fiable. Les informations doivent être vérifiées avant de servir à une décision commerciale.</div>
 </main>
-<footer style="text-align:center;padding:20px"><small>Pack.ma · Robot 1 · Prototype local</small></footer>
-
 <script>
-(function(){
-"use strict";
 const $=id=>document.getElementById(id);
-const KEY="pack_robot1_competitors_v1";
-const COVER="pack_robot1_coverage_v1";
-let records=[];
-let keywords=[];
-let currentProduct="";
-try{records=JSON.parse(localStorage.getItem(KEY)||"[]");if(!Array.isArray(records))records=[]}catch(e){records=[]}
-
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function uniq(a){return [...new Set(a.map(x=>x.trim()).filter(Boolean))]}
-function save(){localStorage.setItem(KEY,JSON.stringify(records))}
-function makeUrl(base,q){return base+encodeURIComponent(q)}
-function generate(){
-const p=$("product").value.trim();
-if(!p){alert("Entre le nom du produit.");return}
-currentProduct=p;
-const extras=$("variants").value.split(/\n/).map(s=>s.trim()).filter(Boolean);
-const terms=uniq([p,...extras]);
-const city=$("city").value;
-keywords=uniq([
-...terms,
-...terms.map(x=>x+" Maroc"),
-...terms.map(x=>x+" prix Maroc"),
-...terms.map(x=>x+" acheter Maroc"),
-...terms.map(x=>x+" livraison"),
-...terms.map(x=>x+" بالجملة"),
-...terms.map(x=>x+" ثمن"),
-...terms.map(x=>x+" المغرب"),
-...terms.map(x=>x+" شراء"),
-...terms.map(x=>x+" توصيل"),
-...terms.map(x=>x+" Morocco"),
-...terms.map(x=>x+" price"),
-...terms.map(x=>x+" wholesale"),
-...(city!=="Maroc"?terms.map(x=>x+" "+city):[])
-]);
-$("keywordOutput").innerHTML="<h3>Mots-clés proposés</h3><div class='keywords'>"+keywords.map(x=>"<span class='keyword'>"+esc(x)+"</span>").join("")+"</div><div class='actions'><button id='copyKeywords'>Copier les mots-clés</button></div><p><small>Les variantes arabes sont des suggestions génériques, pas une traduction garantie. Ajoute les termes locaux que tu connais.</small></p>";
-$("copyKeywords").onclick=async()=>{
-try{await navigator.clipboard.writeText(keywords.join("\n"));alert("Mots-clés copiés.")}catch(e){alert("La copie automatique n'est pas disponible sur ce navigateur. Sélectionne les mots-clés manuellement.")}
-};
-const q=p+" "+city;
-const links=[
-["Google — recherche générale",makeUrl("https://www.google.com/search?q=",q)],
-["Google — vendeurs et prix",makeUrl("https://www.google.com/search?q=",p+" acheter prix "+city)],
-["Google — recherche en arabe",makeUrl("https://www.google.com/search?q=",p+" المغرب ثمن شراء")],
-["Bing",makeUrl("https://www.bing.com/search?q=",q)],
-["Facebook — pages indexées",makeUrl("https://www.google.com/search?q=","site:facebook.com "+q)],
-["Instagram — pages indexées",makeUrl("https://www.google.com/search?q=","site:instagram.com "+q)],
-["TikTok — pages indexées",makeUrl("https://www.google.com/search?q=","site:tiktok.com "+q)],
-["YouTube",makeUrl("https://www.youtube.com/results?search_query=",q)],
-["Meta Ad Library","https://www.facebook.com/ads/library/"],
-["Marketplaces",makeUrl("https://www.google.com/search?q=",q+" boutique en ligne Maroc")]
-];
-$("searchLinks").innerHTML=links.map(([n,u])=>"<a href='"+esc(u)+"' target='_blank' rel='noopener noreferrer'>"+esc(n)+" ↗</a>").join("");
+let studies=[],active=null,competitors=[];
+const stages=['Étude produit','Mots-clés','Recherche','Identification','Extraction publique','Publicités visibles','Métriques sociales','Sources et qualité','Fiche normalisée','Synchronisation Robot 2'];
+function key(){return sessionStorage.getItem('packma_access_key')||''}
+async function api(path,opt={}){
+ const send=k=>fetch(path,{...opt,headers:{'content-type':'application/json',...(opt.headers||{}),...(k?{authorization:'Bearer '+k}:{})}});
+ let r=await send(key());
+ if(r.status===401){
+  let k=prompt('Mot de passe Pack.ma (secret Cloudflare PACK_ACCESS_KEY) :');
+  if(!k)throw Error('Authentification annulée');
+  sessionStorage.setItem('packma_access_key',k);r=await send(k);
+ }
+ let d=await r.json().catch(()=>({error:'Réponse serveur invalide'}));
+ if(!r.ok)throw Error(d.error||'Erreur API '+r.status);
+ return d;
+}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function message(t,kind=''){
+ let e=$('message');e.textContent=t;e.classList.remove('hide','error','ok');if(kind)e.classList.add(kind);
+}
+function makeKeywords(product,variants){
+ let out=[];
+ for(let x of [product,...variants].map(s=>s.trim()).filter(Boolean)){
+  for(let q of [x,`acheter ${x} Maroc`,`prix ${x} Maroc`,`${x} livraison Maroc`,`buy ${x} Morocco`,`price ${x} Morocco`,`buy ${x} online`,`شراء ${x} المغرب`,`سعر ${x} المغرب`,`ثمن ${x} المغرب`,`توصيل ${x} المغرب`])if(!out.includes(q))out.push(q);
+ }
+ return out.slice(0,120);
 }
 function render(){
-$("total").textContent=records.length;
-$("verified").textContent=records.filter(r=>r.confidence==="VERIFIE").length;
-$("priced").textContent=records.filter(r=>r.price).length;
-if(!records.length){$("records").innerHTML="<p class='muted'>Aucun concurrent enregistré pour le moment.</p>";return}
-$("records").innerHTML=records.slice().reverse().map(r=>"<div class='item'><strong>"+esc(r.seller)+"</strong><br><small>"+esc(r.platform)+" · "+esc(r.type)+" · "+esc(r.confidence)+" · "+esc(r.createdAt)+"</small><p>Produit : "+esc(r.product)+"<br>Prix : "+esc(r.price||"Non renseigné")+" "+esc(r.currency||"")+"<br><a href='"+esc(r.url)+"' target='_blank' rel='noopener noreferrer'>"+esc(r.url)+"</a></p>"+(r.notes?"<p>"+esc(r.notes)+"</p>":"")+"<button data-del='"+esc(r.id)+"' class='danger'>Supprimer</button></div>").join("");
-$("records").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{records=records.filter(r=>r.id!==b.dataset.del);save();render()});
+ let k=active?.keywords||[];
+ $('keywords').innerHTML=k.map(x=>`<a target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(x)}">${esc(x)}</a>`).join('');
+ $('summary').textContent=active?`${active.product} · ${active.market} · ${new Date(active.created_at).toLocaleString()}`:'Aucune étude sélectionnée';
+ let q=k[0]||active?.product||'';
+ let platforms=[
+ ['Google','https://www.google.com/search?q='],
+ ['Bing','https://www.bing.com/search?q='],
+ ['YouTube','https://www.youtube.com/results?search_query='],
+ ['Jumia','https://www.google.com/search?q=site%3Ajumia.ma+'],
+ ['TikTok','https://www.google.com/search?q=site%3Atiktok.com+'],
+ ['Instagram','https://www.google.com/search?q=site%3Ainstagram.com+'],
+ ['Facebook','https://www.google.com/search?q=site%3Afacebook.com+'],
+ ['Meta Ad Library','https://www.facebook.com/ads/library/?active_status=all&ad_type=ALL&country=MA&q=']
+ ];
+ $('searchLinks').innerHTML=platforms.map(([n,u])=>`<a target="_blank" rel="noopener" href="${u}${encodeURIComponent(q)}">${n}: ${esc(q||'produit')}</a>`).join('')+k.slice(1,10).map(x=>`<a target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(x)}">Google: ${esc(x)}</a>`).join('');
 }
-$("generate").onclick=generate;
-$("clear").onclick=()=>{$("product").value="";$("variants").value="";$("keywordOutput").innerHTML="";$("searchLinks").textContent="Génère d'abord les recherches ci-dessus.";keywords=[];currentProduct=""};
-$("recordForm").onsubmit=e=>{
-e.preventDefault();
-const url=$("url").value.trim();
-try{const u=new URL(url);if(!["http:","https:"].includes(u.protocol))throw Error()}catch(e){alert("Entre une URL valide commençant par http:// ou https://");return}
-records.push({
-id:Date.now().toString()+"-"+Math.random().toString(36).slice(2,8),
-product:currentProduct||$("product").value.trim(),
-seller:$("seller").value.trim(),platform:$("platform").value,type:$("type").value,
-url,price:$("price").value.trim(),currency:$("currency").value,
-confidence:$("confidence").value,notes:$("notes").value.trim(),
-city:$("city").value,category:$("category").value,
-createdAt:new Date().toISOString(),status:"A_VERIFIER"
-});
-save();render();e.target.reset();alert("Fiche enregistrée sur cet appareil.");
-};
-function download(name,data,type){
-const blob=new Blob([data],{type});
-const url=URL.createObjectURL(blob);const a=document.createElement("a");
-a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
-setTimeout(()=>URL.revokeObjectURL(url),1000);
+async function load(prefer=''){
+ let d=await api('/api/studies');studies=d.studies||[];
+ $('study').innerHTML='<option value="">— Choisir —</option>'+studies.map(s=>`<option value="${s.id}">${esc(s.product)} · ${esc(s.market)}</option>`).join('');
+ let id=prefer||$('study').value||studies[0]?.id||'';
+ $('study').value=id;active=studies.find(s=>s.id===id)||null;render();await loadCompetitors();
 }
-function readCoverage(){
-return{checked:[...document.querySelectorAll("#sourceChecks input:checked")].map(x=>x.value),notes:$("coverageNotes").value,updatedAt:new Date().toISOString()};
+async function loadCompetitors(){
+ if(!active){competitors=[];$('competitors').innerHTML='';return}
+ let d=await api('/api/competitors?studyId='+encodeURIComponent(active.id));competitors=d.competitors||[];
+ $('competitors').innerHTML=competitors.map(c=>`<div class="result"><strong>${esc(c.name)}</strong> <span class="pill">${esc(c.status)}</span><p>${esc(c.url||'URL non renseignée')}</p>${c.data?.publicPage?`<p class="ok">Page extraite : ${esc(c.data.publicPage.title||c.data.publicPage.url)} · ${esc(c.data.publicPage.collectedAt||'')}</p><p>${esc(c.data.publicPage.description||'')}</p>`:''}<div class="row"><button onclick="collect('${c.id}')">Extraire / actualiser</button><a class="btn" href="bebe.html">Analyser dans Robot 2</a></div></div>`).join('')||'<p>Aucun concurrent. Ajoute un vendeur ci-dessus.</p>';
 }
-$("exportJson").onclick=()=>download("pack-robot1-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify({
-schema:"pack-competitor-research-v1",sourceRobot:"Robot 1",exportedAt:new Date().toISOString(),
-product:currentProduct||$("product").value.trim(),city:$("city").value,category:$("category").value,
-keywords,coverage:readCoverage(),competitors:records,
-limitations:"Les fiches ont été saisies manuellement. Vérifier les sources et les prix."
-},null,2),"application/json;charset=utf-8");
-$("exportCsv").onclick=()=>{
-const cols=["product","seller","platform","type","url","price","currency","confidence","notes","city","category","createdAt","status"];
-const csv=[cols,...records.map(r=>cols.map(c=>r[c]??""))].map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\r\n");
-download("pack-robot1.csv","\uFEFF"+csv,"text/csv;charset=utf-8");
+$('create').onclick=async()=>{
+ try{
+  let product=$('product').value.trim();if(!product)throw Error('Entre le nom du produit.');
+  let variants=$('variants').value.split(/\n|,/).map(x=>x.trim()).filter(Boolean);
+  let d=await api('/api/studies',{method:'POST',body:JSON.stringify({product,market:$('market').value.trim()||'Maroc',variants,keywords:makeKeywords(product,variants)})});
+  message('Étude créée dans la base partagée.','ok');await load(d.study.id);
+ }catch(e){message(e.message,'error')}
 };
-$("importBtn").onclick=()=>$("importFile").click();
-$("importFile").onchange=async e=>{
-const file=e.target.files[0];if(!file)return;
-try{
-const obj=JSON.parse(await file.text());
-const incoming=Array.isArray(obj)?obj:obj.competitors;
-if(!Array.isArray(incoming))throw Error("Format invalide");
-const seen=new Set(records.map(r=>r.id));
-let added=0;
-incoming.forEach(r=>{if(r&&r.seller&&r.url&&!seen.has(r.id)){records.push({...r,id:r.id||Date.now()+"-"+Math.random()});added++}});
-save();render();alert(added+" fiche(s) importée(s).");
-}catch(err){alert("Import impossible : fichier JSON non reconnu.")}
-e.target.value="";
+$('reload').onclick=()=>load().catch(e=>message(e.message,'error'));
+$('study').onchange=()=>{active=studies.find(s=>s.id===$('study').value)||null;render();loadCompetitors().catch(e=>message(e.message,'error'))};
+$('add').onclick=async()=>{
+ try{
+  if(!active)throw Error('Crée ou sélectionne une étude.');
+  let name=$('name').value.trim(),url=$('url').value.trim();
+  if(!name)throw Error('Entre le nom du concurrent.');
+  if(url&&!/^https?:\/\//i.test(url))url='https://'+url;
+  let data={robot1:{stages:stages.map((title,i)=>({id:i+1,title,status:'A_VERIFIER',notes:''})),createdAt:new Date().toISOString()}};
+  await api('/api/competitors',{method:'POST',body:JSON.stringify({studyId:active.id,name,url,data})});
+  $('name').value='';$('url').value='';message('Concurrent ajouté. Il est maintenant visible dans Robot 2.','ok');await loadCompetitors();
+ }catch(e){message(e.message,'error')}
 };
-$("deleteAll").onclick=()=>{
-if(confirm("Supprimer toutes les fiches enregistrées dans ce navigateur ? Cette action est irréversible sans sauvegarde.")){records=[];save();render()}
+window.collect=async id=>{
+ try{
+  let c=competitors.find(x=>x.id===id);if(!c?.url)throw Error('Ajoute une URL publique avant extraction.');
+  message('Extraction de la page en cours…');
+  let d=await api('/api/collect',{method:'POST',body:JSON.stringify({url:c.url})});
+  await api('/api/competitors',{method:'PATCH',body:JSON.stringify({id,data:{...(c.data||{}),publicPage:d.result},status:'ESTIME'})});
+  message('Extraction terminée. Vérifie les informations sur la source.','ok');await loadCompetitors();
+ }catch(e){message(e.message,'error')}
 };
-function loadCoverage(){
-try{
-const c=JSON.parse(localStorage.getItem(COVER)||"null");
-if(!c)return;
-document.querySelectorAll("#sourceChecks input").forEach(x=>x.checked=(c.checked||[]).includes(x.value));
-$("coverageNotes").value=c.notes||"";
-$("coverageStatus").textContent="Dernier contrôle : "+(c.updatedAt||"date inconnue");
-}catch(e){}
-}
-$("saveCoverage").onclick=()=>{
-const c=readCoverage();localStorage.setItem(COVER,JSON.stringify(c));
-$("coverageStatus").textContent="Contrôle enregistré le "+c.updatedAt+". Sources cochées : "+c.checked.length+".";
-};
-loadCoverage();render();
-})();
+load().catch(e=>message('API non disponible : '+e.message+' — configure Cloudflare Pages, le binding D1 DB et le secret PACK_ACCESS_KEY.','error'));
 </script>
 </body>
 </html>
