@@ -1,767 +1,247 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pack.ma — Robot 2 | Analyse concurrentielle</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pack.ma — Robot 2</title>
 <style>
-:root {
-  color-scheme: dark;
-  --bg:#0b1020; --panel:#141c30; --panel2:#10182a;
-  --border:#2b3852; --text:#eef3ff; --muted:#a4b1c9;
-  --accent:#79a8ff; --green:#54d6a0; --red:#ff7c87;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0; background:var(--bg); color:var(--text);
-  font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;
-}
-header {
-  padding:25px 18px; border-bottom:1px solid var(--border);
-  background:linear-gradient(130deg,#162647,#10182a);
-}
-main {max-width:1250px;margin:auto;padding:20px;}
-h1 {margin:0 0 8px;font-size:clamp(23px,4vw,34px);}
-h2 {font-size:19px;margin:0 0 14px;}
-h3 {font-size:16px;margin:0 0 10px;}
-p {margin:7px 0;}
-small,.muted {color:var(--muted);}
-.layout {display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;}
-.panel {
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:14px;padding:17px;margin-bottom:16px;min-width:0;
-}
-label {display:block;font-size:13px;color:var(--muted);margin:10px 0 5px;}
-input,select,textarea {
-  width:100%;background:var(--panel2);color:var(--text);
-  border:1px solid var(--border);border-radius:8px;
-  padding:10px;font:inherit;min-width:0;
-}
-textarea {min-height:85px;resize:vertical;}
-button,.file-button {
-  border:1px solid var(--border);border-radius:9px;
-  padding:10px 13px;background:#223352;color:var(--text);
-  font:inherit;cursor:pointer;display:inline-flex;align-items:center;
-  justify-content:center;gap:6px;text-decoration:none;
-}
-button:hover,.file-button:hover {filter:brightness(1.2);}
-button.primary {background:#315ca5;border-color:#497acb;}
-button.good {background:#164b3d;border-color:#247a60;}
-button.danger {background:#552631;border-color:#82404c;}
-button:disabled {opacity:.45;cursor:not-allowed;}
-.actions {display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.stack {display:grid;gap:10px;}
-.two {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-.three {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
-.stats {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px;}
-.stat {background:var(--panel2);border:1px solid var(--border);padding:13px;border-radius:10px;}
-.stat strong {display:block;font-size:25px;}
-.competitor {
-  padding:12px;border:1px solid var(--border);border-radius:10px;
-  margin-top:9px;cursor:pointer;overflow-wrap:anywhere;
-}
-.competitor.active {border-color:var(--accent);background:#1b2943;}
-.competitor small {display:block;}
-.badge {display:inline-block;padding:3px 7px;border-radius:6px;background:#27354d;font-size:11px;margin-top:5px;}
-.progress {height:8px;background:#263148;border-radius:10px;overflow:hidden;margin:8px 0;}
-.progress div {height:100%;width:0;background:var(--green);transition:width .2s;}
-.check {border:1px solid var(--border);border-radius:10px;padding:13px;margin:10px 0;}
-.check-head {display:flex;gap:10px;align-items:flex-start;}
-.check-number {background:#283b5b;border-radius:7px;padding:4px 8px;font-weight:700;}
-.check-title {font-weight:650;}
-.check-grid {display:grid;grid-template-columns:minmax(140px,.7fr) minmax(0,2fr);gap:12px;margin-top:10px;}
-hr {border:0;border-top:1px solid var(--border);margin:16px 0;}
-.notice {padding:12px;border-radius:9px;background:#182b40;border:1px solid #314d70;}
-.warning {background:#382a19;border-color:#6e5129;}
-.hidden {display:none!important;}
-footer {color:var(--muted);text-align:center;padding:25px 10px;}
-a {color:var(--accent);overflow-wrap:anywhere;}
-@media(max-width:800px) {
- .layout {grid-template-columns:1fr;}
- .three,.stats {grid-template-columns:repeat(3,minmax(0,1fr));}
-}
-@media(max-width:520px) {
- main {padding:12px;}
- .panel {padding:13px;}
- .two,.three {grid-template-columns:1fr;}
- .check-grid {grid-template-columns:1fr;gap:5px;}
- .actions button,.actions .file-button {flex:1;}
-}
+:root{color-scheme:dark;--bg:#0b1020;--p:#151e30;--l:#34415a;--t:#f4f7ff;--m:#a8b5cc;--g:#75e5c0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--t);font:15px/1.5 system-ui,Arial}
+header{padding:24px 18px;background:#13283a;border-bottom:1px solid var(--l)}
+header>div,main{max-width:1200px;margin:auto}
+main{padding:18px}
+h1{font-size:clamp(24px,5vw,35px);margin:6px 0}
+h2{font-size:19px;margin:0 0 12px}
+p,.muted,small{color:var(--m)}
+.pill{font-size:12px;border:1px solid var(--l);border-radius:99px;padding:3px 8px;color:var(--m)}
+.card,.panel{background:var(--p);border:1px solid var(--l);border-radius:13px;padding:17px;margin-bottom:16px}
+.layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px}
+label{display:block;margin:10px 0 5px;font-size:13px;color:var(--m)}
+input,select,textarea{width:100%;padding:10px;background:#0c1424;color:var(--t);border:1px solid var(--l);border-radius:8px;font:inherit}
+textarea{min-height:85px}
+button,.btn{padding:10px 13px;border-radius:8px;border:1px solid var(--l);background:#24324a;color:white;cursor:pointer;font:inherit;text-decoration:none;display:inline-block}
+button.primary{background:#17634e}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.notice{padding:10px;border-radius:8px;background:#1d2b40;margin:10px 0}
+.hide{display:none}
+.error{color:#ff9a9a}
+.ok{color:var(--g)}
+.stage{border:1px solid var(--l);border-radius:10px;padding:13px;margin:10px 0}
+.stageHead{display:flex;gap:9px;align-items:center}
+.num{background:#253a56;border-radius:8px;padding:4px 9px;font-weight:700}
+.small{font-size:12px;color:var(--m)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.barRow{display:grid;grid-template-columns:95px 1fr 85px;gap:9px;align-items:center;margin:8px 0}
+.track{height:15px;background:#0b1424;border-radius:99px;overflow:hidden}
+.bar{height:100%;background:#75e5c0}
+.status{max-width:220px}
+@media(max-width:800px){.layout,.two{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header>
-  <div style="max-width:1250px;margin:auto">
-    <div class="muted">PACK.MA / VEILLE E-COMMERCE MAROC</div>
-    <h1>Robot 2 — Analyse concurrentielle</h1>
-    <p class="muted">Analyse les concurrents un par un, documente les preuves et prépare les décisions commerciales.</p>
-  </div>
-</header>
-
+<header><div>
+<span class="pill">PACK.MA · ROBOT 2 / 13 ÉTAGES</span>
+<h1>Analyse approfondie des concurrents</h1>
+<p>Base partagée avec Robot 1. L'historique de trafic est limité aux trois derniers mois et conserve les sources et dates.</p>
+<a class="btn" href="index.html">← Robot 1</a>
+</div></header>
 <main>
-  <section class="panel">
-    <h2>1. Importer les concurrents du Robot 1</h2>
-    <p class="muted">Dans index.html, exporte tes concurrents en JSON puis importe ce fichier ici. Tu peux aussi ajouter un concurrent manuellement.</p>
-    <div class="actions">
-      <label class="file-button" style="margin:0">
-        Importer le JSON
-        <input id="importFile" type="file" accept=".json,application/json" style="display:none">
-      </label>
-      <button id="addBtn" class="primary">+ Ajouter un concurrent</button>
-      <button id="exportBtn">Exporter le rapport JSON</button>
-      <button id="csvBtn">Exporter le tableau CSV</button>
-    </div>
-    <p id="importMessage" class="muted" aria-live="polite"></p>
-    <div class="notice warning">
-      <strong>À savoir :</strong> ce robot est une interface d'analyse. Il ne récupère pas automatiquement les statistiques privées des concurrents. Les données doivent être recherchées et documentées manuellement.
-    </div>
-  </section>
-
-  <div class="stats">
-    <div class="stat"><span class="muted">Concurrents</span><strong id="totalCount">0</strong></div>
-    <div class="stat"><span class="muted">Analyses terminées</span><strong id="doneCount">0</strong></div>
-    <div class="stat"><span class="muted">Contrôles renseignés</span><strong id="checksCount">0%</strong></div>
-  </div>
-
-  <div class="layout">
-    <aside>
-      <section class="panel">
-        <h2>2. Liste des concurrents</h2>
-        <label for="filterInput">Rechercher dans la liste</label>
-        <input id="filterInput" placeholder="Nom, vendeur, plateforme...">
-        <div id="competitorList"></div>
-        <p id="emptyList" class="muted">Aucun concurrent. Importe un JSON ou ajoute-en un.</p>
-      </section>
-      <section class="panel">
-        <h3>Sauvegarde et données</h3>
-        <p class="muted">Les modifications sont enregistrées dans le stockage local de ce navigateur.</p>
-        <div class="actions">
-          <button id="backupBtn">Télécharger une sauvegarde</button>
-          <button id="restoreBtn">Restaurer une sauvegarde</button>
-          <input id="restoreFile" type="file" accept=".json,application/json" class="hidden">
-        </div>
-        <hr>
-        <button id="deleteBtn" class="danger" disabled>Supprimer ce concurrent</button>
-        <p class="muted">Une sauvegarde JSON est recommandée avant de changer de navigateur ou d'effacer les données du navigateur.</p>
-      </section>
-    </aside>
-
-    <section>
-      <div id="noSelection" class="panel">
-        <h2>Commence par sélectionner un concurrent</h2>
-        <p class="muted">Tu pourras vérifier son identité, son offre, ses prix, sa publicité, son activité sociale et les informations disponibles sur son trafic.</p>
-      </div>
-
-      <div id="editor" class="hidden">
-        <section class="panel">
-          <h2>3. Fiche du concurrent</h2>
-          <div class="two">
-            <div><label for="seller">Nom du vendeur / entreprise</label><input id="seller" placeholder="Nom commercial"></div>
-            <div><label for="platform">Plateforme principale</label>
-              <select id="platform">
-                <option value="">À préciser</option>
-                <option>Site web</option><option>Facebook</option><option>Instagram</option>
-                <option>TikTok</option><option>Marketplace</option><option>YouTube</option><option>Autre</option>
-              </select>
-            </div>
-          </div>
-          <div class="two">
-            <div><label for="url">URL principale</label><input id="url" type="url" placeholder="https://..."></div>
-            <div><label for="product">Produit / modèle</label><input id="product" placeholder="Produit étudié"></div>
-          </div>
-          <div class="two">
-            <div><label for="city">Villes / zones couvertes</label><input id="city" placeholder="Casablanca, Mohammedia..."></div>
-            <div><label for="price">Prix constaté et devise</label><input id="price" placeholder="Ex. 149 MAD, observé le..."></div>
-          </div>
-          <div class="two">
-            <div><label for="identity">Identité / type de concurrence</label>
-              <select id="identity">
-                <option value="A_VERIFIER">À vérifier</option>
-                <option value="DIRECT">Direct</option>
-                <option value="INDIRECT">Indirect</option>
-                <option value="NON_CONCURRENT">Pas un concurrent confirmé</option>
-              </select>
-            </div>
-            <div><label for="reviewDate">Date de l'analyse</label><input id="reviewDate" type="date"></div>
-          </div>
-          <label for="overview">Résumé et observations générales</label>
-          <textarea id="overview" placeholder="Ce qui est constaté, sans supposition présentée comme un fait."></textarea>
-        </section>
-
-        <section class="panel">
-          <h2>4. Contrôles obligatoires</h2>
-          <p class="muted">Pour chaque contrôle, choisis un statut et consigne les preuves, les liens, les dates ou les limites rencontrées.</p>
-          <div class="progress"><div id="progressBar"></div></div>
-          <p id="progressText" class="muted">0 / 12 contrôles renseignés</p>
-          <div id="checksContainer"></div>
-        </section>
-
-        <section class="panel">
-          <h2>5. Synthèse stratégique pour Pack.ma</h2>
-          <label for="strengths">Forces du concurrent — preuves à l'appui</label>
-          <textarea id="strengths" placeholder="Ex. gamme claire, offre vérifiée, livraison documentée..."></textarea>
-          <label for="weaknesses">Faiblesses ou limites observées</label>
-          <textarea id="weaknesses" placeholder="Distingue les faits de tes hypothèses."></textarea>
-          <label for="opportunities">Opportunités pour Pack.ma</label>
-          <textarea id="opportunities" placeholder="Offre à tester, différenciation, pack, contenu..."></textarea>
-          <label for="ideas">Actions à tester et prochaines étapes</label>
-          <textarea id="ideas" placeholder="Action, priorité, coût éventuel à valider avant toute dépense."></textarea>
-          <label for="finalNotes">Conclusion et niveau de confiance</label>
-          <textarea id="finalNotes" placeholder="Ce que l'on sait, ce que l'on ne sait pas et ce qu'il faut vérifier ensuite."></textarea>
-          <div class="actions">
-            <button id="saveBtn" class="primary">Enregistrer la fiche</button>
-            <button id="openUrlBtn">Ouvrir le site du concurrent</button>
-          </div>
-          <p id="saveMessage" class="muted" aria-live="polite"></p>
-        </section>
-      </div>
-    </section>
-  </div>
+<div class="layout">
+<aside>
+<section class="panel">
+<h2>Étude et concurrent</h2>
+<label for="study">Étude</label><select id="study"></select>
+<label for="competitor">Concurrent</label><select id="competitor"></select>
+<div id="side" class="small"></div>
+<div class="row" style="margin-top:12px">
+<button id="reload">Actualiser</button>
+<button class="primary" id="save">Enregistrer</button>
+</div>
+<div id="message" class="notice hide"></div>
+</section>
+<section class="panel">
+<h2>Mesure mensuelle du trafic</h2>
+<p class="small">Ne saisis que les chiffres indiqués par une source. Ce robot ne peut pas obtenir les statistiques privées d'une boutique.</p>
+<label for="month">Mois</label><input id="month" type="month">
+<label for="visits">Visites estimées</label><input id="visits" type="number" min="0" step="1">
+<label for="status">Statut</label>
+<select id="status">
+<option>VERIFIE</option><option>ESTIME</option>
+<option selected>A_VERIFIER</option><option>INTROUVABLE</option><option>INACCESSIBLE</option>
+</select>
+<label for="source">URL source</label><input id="source" type="url" placeholder="https://...">
+<label for="method">Outil / méthode</label><input id="method" placeholder="Ex. outil d'estimation de trafic">
+<label for="evidence">Preuve, période exacte, notes</label><textarea id="evidence"></textarea>
+<button id="saveTraffic" class="primary" style="margin-top:10px">Enregistrer la mesure</button>
+</section>
+</aside>
+<div>
+<section class="card"><h2>Identité et données publiques</h2><div id="identity">Sélectionne un concurrent.</div></section>
+<section class="card">
+<h2>Historique du trafic — trois derniers mois</h2>
+<div id="graph">Aucune mesure chargée.</div>
+<div id="records"></div>
+<p class="small">Les visites ne sont pas des ventes. Compare seulement des mesures de même source ou de méthodes comparables. Les données anciennes absentes ne peuvent pas être recréées.</p>
+</section>
+<section class="card">
+<h2>Les 13 étages d'analyse</h2>
+<p class="small">« Introuvable » et « Inaccessible » ne comptent pas comme vérification réussie. Ajoute les sources, dates et preuves dans les notes.</p>
+<div id="stages"></div>
+<button id="saveBottom" class="primary">Enregistrer les 13 étages</button>
+</section>
+<section class="card"><h2>Sources et observations</h2><div id="observations"></div></section>
+</div>
+</div>
 </main>
-
-<footer>Pack.ma · Outil local de veille concurrentielle · Les faits doivent rester traçables.</footer>
-
 <script>
-"use strict";
-
-const STORAGE_KEY = "packma_robot2_v1";
-
-const CHECKS = [
-  {
-    id:"identity", title:"Identité et comptes associés",
-    help:"Nom de l'entreprise, comptes officiels, liens entre les profils et niveau de certitude.",
-    placeholder:"Liens des comptes, éléments qui confirment ou non qu'ils appartiennent au même vendeur..."
-  },
-  {
-    id:"products", title:"Produit exact, modèles et alternatives",
-    help:"Référence, caractéristiques, variantes, différences entre le produit observé et le produit étudié.",
-    placeholder:"Référence exacte, captures ou pages produit, alternatives comparables..."
-  },
-  {
-    id:"presence", title:"Présence au Maroc, villes et livraison",
-    help:"Zone de livraison annoncée, délais, paiement à la livraison, conditions et frais.",
-    placeholder:"Villes confirmées, conditions de livraison, URL et date de consultation..."
-  },
-  {
-    id:"pricing", title:"Prix, promotions, packs et frais",
-    help:"Prix réellement affiché, devise, réduction, prix barré, packs, livraison et éventuels frais.",
-    placeholder:"Prix observé, devise, date, promotion, frais et lien source..."
-  },
-  {
-    id:"traffic", title:"Trafic estimé sur les trois derniers mois",
-    help:"Visites estimées, outil utilisé, période, géographie et limites. Ne pas inventer les chiffres.",
-    placeholder:"Outil, URL du rapport, période exacte, pays, estimation ou raison de l'indisponibilité..."
-  },
-  {
-    id:"acquisition", title:"Canaux d'acquisition",
-    help:"SEO, publicités, réseaux sociaux, influenceurs, affiliation, marketplace et autres canaux.",
-    placeholder:"Canal observé, preuve, URL et date..."
-  },
-  {
-    id:"ads", title:"Publicités visibles et pages de destination",
-    help:"Bibliothèque publicitaire, créations, dates visibles, texte, offre et landing page.",
-    placeholder:"Lien de la publicité, plateforme, date observée, texte et destination..."
-  },
-  {
-    id:"social", title:"Activité sociale et engagement",
-    help:"Fréquence de publication, vues ou interactions visibles, période observée et contexte.",
-    placeholder:"Compte, période d'observation, nombre de publications et indicateurs visibles..."
-  },
-  {
-    id:"positioning", title:"Positionnement, promesse et cible",
-    help:"Promesse de vente, bénéfice annoncé, audience visée et différenciation revendiquée.",
-    placeholder:"Messages réellement utilisés, exemples, liens et hypothèses séparées..."
-  },
-  {
-    id:"creative", title:"Contenus et formats créatifs",
-    help:"Vidéos, démonstrations, témoignages, visuels, angles publicitaires et appels à l'action.",
-    placeholder:"Exemples, liens, formats, angle et date..."
-  },
-  {
-    id:"swot", title:"Forces, faiblesses et opportunités",
-    help:"Synthèse argumentée. Chaque conclusion importante doit renvoyer à une observation.",
-    placeholder:"Faits observés, déductions raisonnables, incertitudes et opportunités..."
-  },
-  {
-    id:"sources", title:"Sources, dates et contradictions",
-    help:"Liste des sources consultées, dates, informations contradictoires et contrôles encore nécessaires.",
-    placeholder:"URLs, dates de consultation, contradictions et prochaine vérification..."
-  }
+const $=id=>document.getElementById(id);
+let studies=[],activeStudy=null,competitors=[],active=null,observations=[],draft=[];
+const defs=[
+['Identité et structure','Nom, site, comptes publics, vendeurs associés et présence au Maroc.'],
+['Produits et catalogue','Produit exact, variantes, modèles, compléments et alternatives.'],
+['Présence géographique et livraison','Villes, frais, délais, paiement à la livraison et retours publiés.'],
+['Prix et stratégie commerciale','Prix, promotions, packs, livraison et offres observées.'],
+['Trafic estimé actuel','Visites estimées disponibles, période, outil, date et fiabilité.'],
+['Historique et évolution du trafic — 3 mois','Visites mensuelles, variation en %, évolution et graphique sur les trois derniers mois uniquement.'],
+['Canaux d’acquisition','SEO, publicités, réseaux sociaux, accès direct, référents et e-mail si disponibles.'],
+['Publicités et pages de vente','Publicités visibles, dates, formats, offres et destinations.'],
+['Réseaux sociaux et engagement','Abonnés, fréquence, vues, likes, commentaires et partages publics.'],
+['SEO et visibilité','Mots-clés, pages visibles, titres, contenus et opportunités SEO.'],
+['Positionnement et clientèle','Promesse, audience, arguments et différenciation observables.'],
+['Créations publicitaires et contenus','Images, vidéos, accroches, formats et contenus récurrents.'],
+['SWOT, conclusions et preuves','Forces, faiblesses, opportunités, menaces, recommandations et niveau de confiance.']
 ];
-
-const STATUSES = [
-  ["NON_EXECUTE","Non exécuté"],
-  ["VERIFIE","Vérifié"],
-  ["ESTIME","Estimé"],
-  ["INTROUVABLE","Introuvable"],
-  ["INACCESSIBLE","Inaccessible"],
-  ["A_VERIFIER","À vérifier"]
-];
-
-const $ = id => document.getElementById(id);
-let competitors = [];
-let selectedId = null;
-let saveTimer = null;
-
-function uid() {
-  return "cmp_" + Date.now().toString(36) + "_" +
-    Math.random().toString(36).slice(2,9);
+const statuses=['NON_EXECUTE','VERIFIE','ESTIME','INTROUVABLE','INACCESSIBLE','A_VERIFIER'];
+function token(){return sessionStorage.getItem('packma_access_key')||''}
+async function api(path,opt={}){
+ const send=k=>fetch(path,{...opt,headers:{'content-type':'application/json',...(opt.headers||{}),...(k?{authorization:'Bearer '+k}:{})}});
+ let r=await send(token());
+ if(r.status===401){
+  let k=prompt('Mot de passe Pack.ma (secret Cloudflare PACK_ACCESS_KEY) :');
+  if(!k)throw Error('Authentification annulée');
+  sessionStorage.setItem('packma_access_key',k);r=await send(k);
+ }
+ let d=await r.json().catch(()=>({error:'Réponse serveur invalide'}));
+ if(!r.ok)throw Error(d.error||'Erreur API '+r.status);
+ return d;
 }
-
-function today() {
-  return new Date().toISOString().slice(0,10);
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function message(t,kind=''){
+ let e=$('message');e.textContent=t;e.classList.remove('hide','error','ok');
+ if(kind)e.classList.add(kind);
 }
-
-function normalizeCompetitor(raw) {
-  const c = raw && typeof raw === "object" ? raw : {};
-  const name = String(c.seller || c.name || c.competitor ||
-    c.title || c.business || "").trim();
-  const url = String(c.url || c.website || c.link || "").trim();
-  const checks = {};
-
-  CHECKS.forEach(def => {
-    const previous = c.checks && c.checks[def.id];
-    checks[def.id] = {
-      status: STATUSES.some(s => s[0] === previous?.status)
-        ? previous.status : "NON_EXECUTE",
-      notes: String(previous?.notes || "")
-    };
-  });
-
-  return {
-    id: String(c.id || uid()),
-    seller: name || "Concurrent sans nom",
-    platform: String(c.platform || ""),
-    url,
-    product: String(c.product || c.productName || c.query || ""),
-    city: String(c.city || c.location || ""),
-    price: String(c.price || ""),
-    identity: String(c.identity || "A_VERIFIER"),
-    reviewDate: String(c.reviewDate || today()),
-    overview: String(c.overview || c.notes || c.observations || ""),
-    checks,
-    strengths: String(c.strengths || ""),
-    weaknesses: String(c.weaknesses || ""),
-    opportunities: String(c.opportunities || ""),
-    ideas: String(c.ideas || ""),
-    finalNotes: String(c.finalNotes || ""),
-    importedData: c
-  };
+function defaultStages(data){
+ let saved=data?.robot2?.stages||[];
+ return defs.map((d,i)=>({id:i+1,title:d[0],status:saved[i]?.status||'NON_EXECUTE',notes:saved[i]?.notes||''}));
 }
-
-function loadLocal() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed)) {
-      competitors = parsed.map(normalizeCompetitor);
-    } else if (Array.isArray(parsed.competitors)) {
-      competitors = parsed.competitors.map(normalizeCompetitor);
-    }
-  } catch (e) {
-    console.warn("Impossible de charger la sauvegarde locale.", e);
-  }
+function renderStages(){
+ $('stages').innerHTML=draft.map((s,i)=>`<div class="stage">
+ <div class="stageHead"><span class="num">${i+1}</span><strong>${esc(s.title)}</strong></div>
+ <p class="small">${esc(defs[i][1])}</p><label>Statut</label>
+ <select class="status" data-i="${i}" data-f="status">${statuses.map(v=>`<option value="${v}" ${v===s.status?'selected':''}>${v.replace('_',' ')}</option>`).join('')}</select>
+ <label>Observations, source URL, date et recommandations</label>
+ <textarea data-i="${i}" data-f="notes" placeholder="Faits constatés, source, date, limites, contradictions…">${esc(s.notes)}</textarea></div>`).join('');
+ $('stages').querySelectorAll('[data-i]').forEach(e=>e.onchange=()=>draft[+e.dataset.i][e.dataset.f]=e.value);
 }
-
-function persist() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      app:"Pack.ma Robot 2",
-      version:1,
-      savedAt:new Date().toISOString(),
-      competitors
-    }));
-    return true;
-  } catch (e) {
-    alert("La sauvegarde locale a échoué. Télécharge un rapport JSON pour conserver tes données.");
-    return false;
-  }
+function months(){
+ let d=new Date(),a=[];
+ for(let n=2;n>=0;n--){
+  let x=new Date(d.getFullYear(),d.getMonth()-n,1);
+  a.push({key:`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}`,label:x.toLocaleDateString('fr-FR',{month:'short',year:'numeric'})});
+ }
+ return a;
 }
-
-function selected() {
-  return competitors.find(c => c.id === selectedId) || null;
+function renderTraffic(){
+ let ms=months(),v=observations.filter(o=>o.metric==='visits'&&ms.some(m=>m.key===String(o.period_start||'').slice(0,7)));
+ let rows=ms.map(m=>({...m,rec:v.filter(o=>String(o.period_start||'').slice(0,7)===m.key).sort((a,b)=>String(b.collected_at).localeCompare(String(a.collected_at)))[0]||null}));
+ let nums=rows.map(x=>x.rec&&Number.isFinite(Number(x.rec.value))?Number(x.rec.value):null);
+ let max=Math.max(1,...nums.filter(x=>x!==null));
+ $('graph').innerHTML=rows.map((r,i)=>`<div class="barRow"><span>${esc(r.label)}</span><div class="track"><div class="bar" style="width:${nums[i]===null?0:Math.max(1,nums[i]/max*100)}%"></div></div><strong>${nums[i]===null?'Indisponible':nums[i].toLocaleString('fr-FR')}</strong></div>`).join('');
+ let trend='Évolution non calculable : il manque une ou plusieurs valeurs mensuelles.';
+ if(nums.every(x=>x!==null)&&nums[0]!==0){
+  let p=(nums[2]-nums[0])/nums[0]*100;
+  trend=`Variation entre le premier et le dernier mois affichés : ${p>=0?'+':''}${p.toFixed(1)} %. À interpréter seulement si les mesures sont comparables.`;
+ }
+ $('graph').innerHTML+=`<p><strong>${esc(trend)}</strong></p>`;
+ $('records').innerHTML=rows.map(r=>`<div class="stage"><strong>${esc(r.label)}</strong> — ${r.rec?`${Number(r.rec.value).toLocaleString('fr-FR')} visites · ${esc(r.rec.status)}`:'aucune mesure'}${r.rec?`<p class="small">Période ${esc(r.rec.period_start)} → ${esc(r.rec.period_end)} · collecté ${esc(r.rec.collected_at)}</p><p class="small">Source : <a target="_blank" rel="noopener" href="${esc(r.rec.source_url||'#')}">${esc(r.rec.source_url||'non fournie')}</a> · ${esc(r.rec.method)}</p><p>${esc(r.rec.evidence)}</p>`:''}</div>`).join('');
 }
-
-function countChecks(c) {
-  return CHECKS.filter(def =>
-    c.checks[def.id] &&
-    c.checks[def.id].status !== "NON_EXECUTE"
-  ).length;
+function renderObs(){
+ $('observations').innerHTML=[...observations].sort((a,b)=>String(b.collected_at).localeCompare(String(a.collected_at))).map(o=>`<div class="stage"><strong>${esc(o.metric)}</strong> : ${o.value==null?'—':esc(o.value)} ${esc(o.unit||'')} <span class="pill">${esc(o.status)}</span><p class="small">${esc(o.period_start||'période non précisée')} → ${esc(o.period_end||'')} · ${esc(o.collected_at||'')}</p><p class="small">Source : <a target="_blank" rel="noopener" href="${esc(o.source_url||'#')}">${esc(o.source_url||'non fournie')}</a> · ${esc(o.method||'')}</p><p>${esc(o.evidence||'')}</p></div>`).join('')||'<p>Aucune observation enregistrée.</p>';
 }
-
-function isComplete(c) {
-  return countChecks(c) === CHECKS.length;
+function renderIdentity(){
+ if(!active){$('identity').textContent='Sélectionne un concurrent.';return}
+ let p=active.data?.publicPage||{};
+ $('identity').innerHTML=`<div class="two"><div><strong>${esc(active.name)}</strong><p><a target="_blank" rel="noopener" href="${esc(active.url||'#')}">${esc(active.url||'URL absente')}</a></p><p class="small">Domaine : ${esc(active.domain||'inconnu')} · Statut : ${esc(active.status)}</p></div><div><strong>Dernière extraction publique</strong><p>${esc(p.title||'Aucune page extraite')}</p><p>${esc(p.description||'Description non disponible')}</p><p class="small">Collecte : ${esc(p.collectedAt||'—')} · Méthode : ${esc(p.method||'—')}</p><p class="small">Source : <a target="_blank" rel="noopener" href="${esc(p.url||active.url||'#')}">${esc(p.url||active.url||'non fournie')}</a></p><p>${esc(p.excerpt||'')}</p></div></div>`;
 }
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, ch => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[ch]);
+async function load(prefer=''){
+ let d=await api('/api/studies');studies=d.studies||[];
+ $('study').innerHTML='<option value="">— Choisir une étude —</option>'+studies.map(s=>`<option value="${s.id}">${esc(s.product)} · ${esc(s.market)}</option>`).join('');
+ let id=prefer||$('study').value||studies[0]?.id||'';
+ $('study').value=id;activeStudy=studies.find(s=>s.id===id)||null;
+ await loadCompetitors();
 }
-
-function safeUrl(value) {
-  try {
-    const u = new URL(value);
-    return ["http:","https:"].includes(u.protocol) ? u.href : "";
-  } catch {
-    return "";
-  }
+async function loadCompetitors(prefer=''){
+ if(!activeStudy){
+  competitors=[];active=null;$('competitor').innerHTML='<option value="">Aucun concurrent</option>';
+  renderIdentity();$('stages').innerHTML='';return;
+ }
+ let d=await api('/api/competitors?studyId='+encodeURIComponent(activeStudy.id));
+ competitors=d.competitors||[];
+ $('competitor').innerHTML='<option value="">— Choisir un concurrent —</option>'+competitors.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+ let id=prefer||$('competitor').value||competitors[0]?.id||'';
+ $('competitor').value=id;active=competitors.find(c=>c.id===id)||null;
+ await loadData();
 }
-
-function renderStats() {
-  $("totalCount").textContent = competitors.length;
-  $("doneCount").textContent = competitors.filter(isComplete).length;
-  const total = competitors.length * CHECKS.length;
-  const completed = competitors.reduce((sum,c) => sum + countChecks(c),0);
-  $("checksCount").textContent = total ? Math.round(completed/total*100) + "%" : "0%";
+async function loadData(){
+ if(!active){
+  observations=[];draft=[];renderIdentity();$('stages').innerHTML='';
+  $('graph').textContent='Sélectionne un concurrent.';return;
+ }
+ renderIdentity();draft=defaultStages(active.data||{});renderStages();
+ $('side').textContent=`${activeStudy?.product||''} · ${competitors.length} concurrent(s)`;
+ let d=await api('/api/observations?competitorId='+encodeURIComponent(active.id));
+ observations=d.observations||[];renderTraffic();renderObs();
 }
-
-function renderList() {
-  const filter = $("filterInput").value.trim().toLowerCase();
-  const list = $("competitorList");
-  list.innerHTML = "";
-  const visible = competitors.filter(c =>
-    [c.seller,c.platform,c.url,c.product,c.city]
-      .join(" ").toLowerCase().includes(filter)
-  );
-
-  $("emptyList").classList.toggle("hidden", visible.length > 0);
-
-  visible.forEach(c => {
-    const item = document.createElement("div");
-    item.className = "competitor" + (c.id === selectedId ? " active" : "");
-    const n = countChecks(c);
-    item.innerHTML = `
-      <strong>${escapeHtml(c.seller)}</strong>
-      <small>${escapeHtml(c.platform || "Plateforme à préciser")}</small>
-      <small>${n}/${CHECKS.length} contrôles renseignés</small>
-      <div class="progress"><div style="width:${n/CHECKS.length*100}%"></div></div>
-      <span class="badge">${isComplete(c) ? "Contrôles terminés" : "Analyse en cours"}</span>`;
-    item.addEventListener("click", () => {
-      saveCurrent(false);
-      selectedId = c.id;
-      renderAll();
-    });
-    list.appendChild(item);
-  });
-
-  renderStats();
-  $("deleteBtn").disabled = !selected();
+$('study').onchange=()=>{
+ activeStudy=studies.find(s=>s.id===$('study').value)||null;
+ loadCompetitors().catch(e=>message(e.message,'error'));
+};
+$('competitor').onchange=()=>{
+ active=competitors.find(c=>c.id===$('competitor').value)||null;
+ loadData().catch(e=>message(e.message,'error'));
+};
+$('reload').onclick=()=>load(activeStudy?.id).then(()=>message('Données actualisées.','ok')).catch(e=>message(e.message,'error'));
+async function saveStages(){
+ if(!active)throw Error('Sélectionne un concurrent.');
+ let data={...(active.data||{}),robot2:{stages:draft.map(s=>({...s,updatedAt:new Date().toISOString()})),updatedAt:new Date().toISOString(),trafficWindowMonths:3}};
+ let d=await api('/api/competitors',{method:'PATCH',body:JSON.stringify({id:active.id,data})});
+ active=d.competitor;competitors=competitors.map(c=>c.id===active.id?active:c);
+ message('Analyse enregistrée dans la base partagée.','ok');
 }
-
-function renderChecks(c) {
-  $("checksContainer").innerHTML = CHECKS.map((def,index) => {
-    const record = c.checks[def.id] || {status:"NON_EXECUTE",notes:""};
-    const options = STATUSES.map(([value,label]) =>
-      `<option value="${value}" ${record.status===value?"selected":""}>${label}</option>`
-    ).join("");
-
-    return `
-      <div class="check" data-check="${def.id}">
-        <div class="check-head">
-          <span class="check-number">${index+1}</span>
-          <div>
-            <div class="check-title">${escapeHtml(def.title)}</div>
-            <small>${escapeHtml(def.help)}</small>
-          </div>
-        </div>
-        <div class="check-grid">
-          <div>
-            <label for="status_${def.id}">Statut du contrôle</label>
-            <select id="status_${def.id}" data-status="${def.id}">${options}</select>
-          </div>
-          <div>
-            <label for="notes_${def.id}">Preuves, source, date et observations</label>
-            <textarea id="notes_${def.id}" data-notes="${def.id}" placeholder="${escapeHtml(def.placeholder)}">${escapeHtml(record.notes)}</textarea>
-          </div>
-        </div>
-      </div>`;
-  }).join("");
-
-  $("checksContainer").querySelectorAll("[data-status]").forEach(el => {
-    el.addEventListener("change", () => {
-      syncChecksFromUI(c);
-      updateProgress(c);
-      scheduleSave();
-    });
-  });
-
-  $("checksContainer").querySelectorAll("[data-notes]").forEach(el => {
-    el.addEventListener("input", () => {
-      syncChecksFromUI(c);
-      scheduleSave();
-    });
-  });
-}
-
-function syncChecksFromUI(c) {
-  CHECKS.forEach(def => {
-    const status = $("status_" + def.id);
-    const notes = $("notes_" + def.id);
-    if (status && notes) {
-      c.checks[def.id] = {
-        status:status.value,
-        notes:notes.value
-      };
-    }
-  });
-}
-
-function updateProgress(c) {
-  const n = countChecks(c);
-  $("progressBar").style.width = (n/CHECKS.length*100) + "%";
-  $("progressText").textContent =
-    `${n} / ${CHECKS.length} contrôles renseignés` +
-    (n===CHECKS.length ? " — Tous les contrôles ont un statut." :
-      " — Certains contrôles n'ont pas encore de statut final.");
-  renderStats();
-  renderList();
-}
-
-const FIELDS = [
-  "seller","platform","url","product","city","price","identity",
-  "reviewDate","overview","strengths","weaknesses","opportunities",
-  "ideas","finalNotes"
-];
-
-function readFieldsInto(c) {
-  FIELDS.forEach(field => {
-    const el = $(field);
-    if (el) c[field] = el.value;
-  });
-  syncChecksFromUI(c);
-}
-
-function saveCurrent(showMessage=true) {
-  const c = selected();
-  if (!c) return;
-  readFieldsInto(c);
-  const ok = persist();
-  renderStats();
-  renderList();
-  updateProgress(c);
-  if (showMessage) {
-    $("saveMessage").textContent = ok
-      ? "Fiche enregistrée dans ce navigateur."
-      : "Échec de la sauvegarde locale. Exporte un JSON.";
-  }
-}
-
-function scheduleSave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => saveCurrent(false),250);
-}
-
-function renderEditor(c) {
-  $("noSelection").classList.toggle("hidden", !!c);
-  $("editor").classList.toggle("hidden", !c);
-  $("deleteBtn").disabled = !c;
-  if (!c) return;
-
-  FIELDS.forEach(field => {
-    if ($(field)) $(field).value = c[field] ?? "";
-  });
-  renderChecks(c);
-  updateProgress(c);
-  $("saveMessage").textContent = "";
-}
-
-function renderAll() {
-  renderList();
-  renderEditor(selected());
-}
-
-function addCompetitor(raw={}) {
-  const c = normalizeCompetitor(raw);
-  if (!raw.seller && !raw.name) c.seller = "Nouveau concurrent";
-  competitors.unshift(c);
-  selectedId = c.id;
-  persist();
-  renderAll();
-}
-
-function downloadFile(filename, content, mime) {
-  const blob = new Blob([content], {type:mime});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url),1000);
-}
-
-function exportJSON() {
-  saveCurrent(false);
-  const payload = {
-    app:"Pack.ma Robot 2",
-    version:1,
-    exportedAt:new Date().toISOString(),
-    methodology:{
-      completion:"Un contrôle est renseigné lorsque son statut est différent de NON_EXECUTE.",
-      statuses:STATUSES.map(s=>s[0]),
-      warning:"Les estimations ne sont pas des mesures vérifiées."
-    },
-    competitors
-  };
-  downloadFile("packma-rapport-concurrentiel.json",
-    JSON.stringify(payload,null,2),"application/json;charset=utf-8");
-}
-
-function csvEscape(value) {
-  return '"' + String(value ?? "").replace(/"/g,'""') + '"';
-}
-
-function exportCSV() {
-  saveCurrent(false);
-  const columns = [
-    "seller","platform","url","product","city","price","identity",
-    "reviewDate","overview",
-    ...CHECKS.flatMap(def=>[
-      def.id+"_status",def.id+"_notes"
-    ]),
-    "strengths","weaknesses","opportunities","ideas","finalNotes",
-    "checks_completed","checks_total","complete"
-  ];
-
-  const rows = competitors.map(c => {
-    const row = {
-      ...c,
-      checks_completed:countChecks(c),
-      checks_total:CHECKS.length,
-      complete:isComplete(c) ? "OUI" : "NON"
-    };
-    CHECKS.forEach(def => {
-      row[def.id+"_status"] = c.checks[def.id]?.status || "NON_EXECUTE";
-      row[def.id+"_notes"] = c.checks[def.id]?.notes || "";
-    });
-    return columns.map(col => csvEscape(row[col])).join(";");
-  });
-
-  const content = "\uFEFF" + columns.map(csvEscape).join(";") + "\r\n" +
-    rows.join("\r\n");
-  downloadFile("packma-rapport-concurrentiel.csv",content,"text/csv;charset=utf-8");
-}
-
-function getCompetitorArray(parsed) {
-  if (Array.isArray(parsed)) return parsed;
-  if (parsed && Array.isArray(parsed.competitors)) return parsed.competitors;
-  if (parsed && Array.isArray(parsed.results)) return parsed.results;
-  if (parsed && Array.isArray(parsed.items)) return parsed.items;
-  throw new Error("Format JSON non reconnu : aucune liste de concurrents trouvée.");
-}
-
-function importJSON(file, mode="merge") {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const parsed = JSON.parse(reader.result);
-      const incoming = getCompetitorArray(parsed);
-      if (!incoming.length) {
-        $("importMessage").textContent = "Le fichier ne contient aucun concurrent.";
-        return;
-      }
-
-      const normalized = incoming.map(normalizeCompetitor);
-      if (mode === "replace") {
-        if (!confirm("Remplacer toutes les fiches actuelles par la sauvegarde importée ?")) return;
-        competitors = normalized;
-      } else {
-        const existingKeys = new Set(competitors.map(c =>
-          (c.url || "").toLowerCase() + "|" + c.seller.toLowerCase()
-        ));
-        let added = 0;
-        normalized.forEach(c => {
-          const key = (c.url || "").toLowerCase() + "|" + c.seller.toLowerCase();
-          if (!existingKeys.has(key)) {
-            competitors.push(c);
-            existingKeys.add(key);
-            added++;
-          }
-        });
-        $("importMessage").textContent =
-          `${added} concurrent(s) ajouté(s). Les fiches déjà présentes ont été ignorées.`;
-      }
-
-      if (!selected() && competitors.length) selectedId = competitors[0].id;
-      if (selected() === null && competitors.length) selectedId = competitors[0].id;
-      persist();
-      renderAll();
-      if (mode === "replace") {
-        $("importMessage").textContent = `${competitors.length} fiche(s) restaurée(s).`;
-      }
-    } catch (e) {
-      $("importMessage").textContent = "Import impossible : " + e.message;
-    } finally {
-      $("importFile").value = "";
-      $("restoreFile").value = "";
-    }
-  };
-  reader.readAsText(file);
-}
-
-$("importFile").addEventListener("change", e => importJSON(e.target.files[0],"merge"));
-$("restoreBtn").addEventListener("click", () => $("restoreFile").click());
-$("restoreFile").addEventListener("change", e => importJSON(e.target.files[0],"replace"));
-$("addBtn").addEventListener("click", () => addCompetitor());
-$("exportBtn").addEventListener("click", exportJSON);
-$("csvBtn").addEventListener("click", exportCSV);
-$("filterInput").addEventListener("input", renderList);
-$("saveBtn").addEventListener("click", () => saveCurrent(true));
-
-$("backupBtn").addEventListener("click", () => {
-  saveCurrent(false);
-  downloadFile("packma-robot2-sauvegarde.json",
-    JSON.stringify({
-      app:"Pack.ma Robot 2",
-      version:1,
-      savedAt:new Date().toISOString(),
-      competitors
-    },null,2),
-    "application/json;charset=utf-8");
-});
-
-$("deleteBtn").addEventListener("click", () => {
-  const c = selected();
-  if (!c) return;
-  if (!confirm(`Supprimer la fiche « ${c.seller} » de ce navigateur ?`)) return;
-  competitors = competitors.filter(item=>item.id!==c.id);
-  selectedId = competitors.length ? competitors[0].id : null;
-  persist();
-  renderAll();
-});
-
-$("openUrlBtn").addEventListener("click", () => {
-  const c = selected();
-  if (!c) return;
-  const url = safeUrl(c.url);
-  if (!url) {
-    alert("Ajoute une URL valide commençant par https:// ou http://.");
-    return;
-  }
-  window.open(url,"_blank","noopener,noreferrer");
-});
-
-FIELDS.forEach(field => {
-  const el = $(field);
-  if (!el) return;
-  el.addEventListener("input", scheduleSave);
-  el.addEventListener("change", scheduleSave);
-});
-
-window.addEventListener("beforeunload", () => {
-  const c = selected();
-  if (c) readFieldsInto(c);
-  persist();
-});
-
-loadLocal();
-if (competitors.length) selectedId = competitors[0].id;
-renderAll();
+$('save').onclick=()=>saveStages().catch(e=>message(e.message,'error'));
+$('saveBottom').onclick=()=>saveStages().catch(e=>message(e.message,'error'));
+$('saveTraffic').onclick=async()=>{
+ try{
+  if(!active)throw Error('Sélectionne un concurrent.');
+  let month=$('month').value,val=$('visits').value;
+  if(!month)throw Error('Choisis le mois.');
+  if(val===''||Number(val)<0)throw Error('Entre un nombre de visites valide.');
+  let [y,m]=month.split('-').map(Number),end=new Date(y,m,0).toISOString().slice(0,10);
+  let d=await api('/api/observations',{method:'POST',body:JSON.stringify({
+   competitorId:active.id,metric:'visits',value:Number(val),unit:'visites/mois',
+   periodStart:month+'-01',periodEnd:end,collectedAt:new Date().toISOString(),
+   sourceUrl:$('source').value.trim(),method:$('method').value.trim()||'MANUEL',
+   status:$('status').value,evidence:$('evidence').value.trim()
+  })});
+  observations.unshift(d.observation);renderTraffic();renderObs();
+  message('Mesure enregistrée. Le graphique affiche seulement les trois derniers mois.','ok');
+ }catch(e){message(e.message,'error')}
+};
+let d=new Date();
+$('month').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+load().catch(e=>message('API non disponible : '+e.message+' — vérifie Cloudflare Pages, D1 et PACK_ACCESS_KEY.','error'));
 </script>
 </body>
 </html>
