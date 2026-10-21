@@ -22,12 +22,13 @@ input,select,textarea{width:100%;padding:11px;background:#0c1424;color:var(--t);
 textarea{min-height:80px}
 button,.btn{padding:10px 13px;border-radius:8px;border:1px solid var(--l);background:#24324a;color:white;cursor:pointer;font:inherit;text-decoration:none;display:inline-block}
 button.primary{background:#17634e;border-color:#27856a}
+button:disabled{opacity:.55;cursor:wait}
 .row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
 .pill{font-size:12px;border:1px solid var(--l);border-radius:99px;padding:3px 8px;color:var(--m)}
 .links{display:flex;gap:7px;flex-wrap:wrap}
 .links a{font-size:13px;color:var(--b);border:1px solid var(--l);border-radius:7px;padding:5px 8px;text-decoration:none}
 .result{border:1px solid var(--l);border-radius:10px;padding:12px;margin-top:10px}
-.notice{background:#1d2b40;border-radius:8px;padding:10px;margin:10px 0}
+.notice{background:#1d2b40;border-radius:8px;padding:10px;margin:10px 0;overflow-wrap:anywhere}
 .ok{color:var(--g)}.error{color:#ff9a9a}.hide{display:none}
 @media(max-width:650px){.grid{grid-template-columns:1fr}main{padding:12px}}
 </style>
@@ -36,7 +37,7 @@ button.primary{background:#17634e;border-color:#27856a}
 <header><div>
 <span class="pill">PACK.MA · ROBOT 1 / 10 ÉTAGES</span>
 <h1>Recherche de concurrents</h1>
-<p>Mots-clés produit FR/EN/AR, recherche, collecte indicative de pages publiques et synchronisation avec Robot 2.</p>
+<p>Mots-clés produit FR/EN/AR, recherche automatique, collecte indicative de pages publiques et synchronisation avec Robot 2.</p>
 </div></header>
 <main>
 <section class="card">
@@ -54,6 +55,7 @@ button.primary{background:#17634e;border-color:#27856a}
 </div>
 <div id="message" class="notice hide"></div>
 </section>
+
 <section class="card">
 <h2>2. Étude active et mots-clés</h2>
 <label for="study">Étude partagée</label>
@@ -62,16 +64,30 @@ button.primary{background:#17634e;border-color:#27856a}
 <div id="keywords" class="links"></div>
 <p>Les mots-clés sont générés en français, anglais et arabe. Vérifie les résultats avant de retenir un concurrent.</p>
 </section>
+
 <section class="card">
 <h2>3. Rechercher des concurrents</h2>
 <div id="searchLinks" class="links"></div>
+
+<div class="notice">
+<strong>Recherche automatique</strong>
+<p>Le robot utilise l'API Serper configurée côté serveur pour rechercher des concurrents au Maroc. Les résultats doivent être vérifiés avant utilisation.</p>
+<div class="row">
+<button class="primary" id="autoSearch">Lancer la recherche automatique</button>
+</div>
+<div id="autoMessage" class="notice hide"></div>
+</div>
+
 <div class="grid" style="margin-top:14px">
 <div><label for="name">Nom du concurrent *</label><input id="name" placeholder="Nom de la boutique"></div>
 <div><label for="url">URL publique</label><input id="url" type="url" placeholder="https://boutique.ma"></div>
 </div>
-<div class="row" style="margin-top:12px"><button class="primary" id="add">Ajouter à l'étude</button></div>
+<div class="row" style="margin-top:12px">
+<button class="primary" id="add">Ajouter à l'étude</button>
+</div>
 <div id="competitors"></div>
 </section>
+
 <section class="card">
 <h2>Les 10 étages de Robot 1</h2>
 <ol>
@@ -89,93 +105,339 @@ button.primary{background:#17634e;border-color:#27856a}
 <p>Les liens de recherche ne sont pas une API automatique. Certaines pages bloquent l'extraction. Le trafic et les métriques non publiés doivent être vérifiés ou saisis manuellement.</p>
 </section>
 </main>
+
 <script>
 const $=id=>document.getElementById(id);
 let studies=[],active=null,competitors=[];
-const stages=['Étude produit','Mots-clés','Recherche','Identification','Extraction publique','Publicités visibles','Métriques sociales','Sources et qualité','Fiche normalisée','Synchronisation Robot 2'];
-function key(){return sessionStorage.getItem('packma_access_key')||''}
+
+const stages=[
+'Étude produit','Mots-clés','Recherche','Identification',
+'Extraction publique','Publicités visibles','Métriques sociales',
+'Sources et qualité','Fiche normalisée','Synchronisation Robot 2'
+];
+
+function key(){
+ return sessionStorage.getItem('packma_access_key')||'';
+}
+
 async function api(path,opt={}){
- const send=k=>fetch(path,{...opt,headers:{'content-type':'application/json',...(opt.headers||{}),...(k?{authorization:'Bearer '+k}:{})}});
+ const send=k=>fetch(path,{
+  ...opt,
+  headers:{
+   'content-type':'application/json',
+   ...(opt.headers||{}),
+   ...(k?{authorization:'Bearer '+k}:{})
+  }
+ });
+
  let r=await send(key());
+
  if(r.status===401){
   let k=prompt('Mot de passe Pack.ma (secret Cloudflare PACK_ACCESS_KEY) :');
   if(!k)throw Error('Authentification annulée');
-  sessionStorage.setItem('packma_access_key',k);r=await send(k);
+  sessionStorage.setItem('packma_access_key',k);
+  r=await send(k);
  }
+
  let d=await r.json().catch(()=>({error:'Réponse serveur invalide'}));
+
  if(!r.ok)throw Error(d.error||'Erreur API '+r.status);
+
  return d;
 }
-function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function message(t,kind=''){
- let e=$('message');e.textContent=t;e.classList.remove('hide','error','ok');if(kind)e.classList.add(kind);
+
+function esc(s){
+ return String(s||'').replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+ }[c]));
 }
+
+function message(t,kind=''){
+ let e=$('message');
+ e.textContent=t;
+ e.classList.remove('hide','error','ok');
+ if(kind)e.classList.add(kind);
+}
+
+function autoMessage(t,kind=''){
+ let e=$('autoMessage');
+ e.textContent=t;
+ e.classList.remove('hide','error','ok');
+ if(kind)e.classList.add(kind);
+}
+
 function makeKeywords(product,variants){
  let out=[];
+
  for(let x of [product,...variants].map(s=>s.trim()).filter(Boolean)){
-  for(let q of [x,`acheter ${x} Maroc`,`prix ${x} Maroc`,`${x} livraison Maroc`,`buy ${x} Morocco`,`price ${x} Morocco`,`buy ${x} online`,`شراء ${x} المغرب`,`سعر ${x} المغرب`,`ثمن ${x} المغرب`,`توصيل ${x} المغرب`])if(!out.includes(q))out.push(q);
+  for(let q of [
+   x,
+   `acheter ${x} Maroc`,
+   `prix ${x} Maroc`,
+   `${x} livraison Maroc`,
+   `buy ${x} Morocco`,
+   `price ${x} Morocco`,
+   `buy ${x} online`,
+   `شراء ${x} المغرب`,
+   `سعر ${x} المغرب`,
+   `ثمن ${x} المغرب`,
+   `توصيل ${x} المغرب`
+  ]){
+   if(!out.includes(q))out.push(q);
+  }
  }
+
  return out.slice(0,120);
 }
+
 function render(){
  let k=active?.keywords||[];
- $('keywords').innerHTML=k.map(x=>`<a target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(x)}">${esc(x)}</a>`).join('');
- $('summary').textContent=active?`${active.product} · ${active.market} · ${new Date(active.created_at).toLocaleString()}`:'Aucune étude sélectionnée';
+
+ $('keywords').innerHTML=k.map(x=>
+  `<a target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(x)}">${esc(x)}</a>`
+ ).join('');
+
+ $('summary').textContent=active
+  ?`${active.product} · ${active.market} · ${new Date(active.created_at).toLocaleString()}`
+  :'Aucune étude sélectionnée';
+
  let q=k[0]||active?.product||'';
+
  let platforms=[
- ['Google','https://www.google.com/search?q='],
- ['Bing','https://www.bing.com/search?q='],
- ['YouTube','https://www.youtube.com/results?search_query='],
- ['Jumia','https://www.google.com/search?q=site%3Ajumia.ma+'],
- ['TikTok','https://www.google.com/search?q=site%3Atiktok.com+'],
- ['Instagram','https://www.google.com/search?q=site%3Ainstagram.com+'],
- ['Facebook','https://www.google.com/search?q=site%3Afacebook.com+'],
- ['Meta Ad Library','https://www.facebook.com/ads/library/?active_status=all&ad_type=ALL&country=MA&q=']
+  ['Google','https://www.google.com/search?q='],
+  ['Bing','https://www.bing.com/search?q='],
+  ['YouTube','https://www.youtube.com/results?search_query='],
+  ['Jumia','https://www.google.com/search?q=site%3Ajumia.ma+'],
+  ['TikTok','https://www.google.com/search?q=site%3Atiktok.com+'],
+  ['Instagram','https://www.google.com/search?q=site%3Ainstagram.com+'],
+  ['Facebook','https://www.google.com/search?q=site%3Afacebook.com+'],
+  ['Meta Ad Library','https://www.facebook.com/ads/library/?active_status=all&ad_type=ALL&country=MA&q=']
  ];
- $('searchLinks').innerHTML=platforms.map(([n,u])=>`<a target="_blank" rel="noopener" href="${u}${encodeURIComponent(q)}">${n}: ${esc(q||'produit')}</a>`).join('')+k.slice(1,10).map(x=>`<a target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(x)}">Google: ${esc(x)}</a>`).join('');
+
+ $('searchLinks').innerHTML=platforms.map(([n,u])=>
+  `<a target="_blank" rel="noopener" href="${u}${encodeURIComponent(q)}">${n}: ${esc(q||'produit')}</a>`
+ ).join('')+k.slice(1,10).map(x=>
+  `<a target="_blank" rel="noopener" href="https://www.google.com/search?q=${encodeURIComponent(x)}">Google: ${esc(x)}</a>`
+ ).join('');
 }
+
 async function load(prefer=''){
- let d=await api('/api/studies');studies=d.studies||[];
- $('study').innerHTML='<option value="">— Choisir —</option>'+studies.map(s=>`<option value="${s.id}">${esc(s.product)} · ${esc(s.market)}</option>`).join('');
+ let d=await api('/api/studies');
+ studies=d.studies||[];
+
+ $('study').innerHTML='<option value="">— Choisir —</option>'+
+  studies.map(s=>
+   `<option value="${esc(s.id)}">${esc(s.product)} · ${esc(s.market)}</option>`
+  ).join('');
+
  let id=prefer||$('study').value||studies[0]?.id||'';
- $('study').value=id;active=studies.find(s=>s.id===id)||null;render();await loadCompetitors();
+
+ $('study').value=id;
+ active=studies.find(s=>s.id===id)||null;
+
+ render();
+ await loadCompetitors();
 }
+
 async function loadCompetitors(){
- if(!active){competitors=[];$('competitors').innerHTML='';return}
- let d=await api('/api/competitors?studyId='+encodeURIComponent(active.id));competitors=d.competitors||[];
- $('competitors').innerHTML=competitors.map(c=>`<div class="result"><strong>${esc(c.name)}</strong> <span class="pill">${esc(c.status)}</span><p>${esc(c.url||'URL non renseignée')}</p>${c.data?.publicPage?`<p class="ok">Page extraite : ${esc(c.data.publicPage.title||c.data.publicPage.url)} · ${esc(c.data.publicPage.collectedAt||'')}</p><p>${esc(c.data.publicPage.description||'')}</p>`:''}<div class="row"><button onclick="collect('${c.id}')">Extraire / actualiser</button><a class="btn" href="bebe.html">Analyser dans Robot 2</a></div></div>`).join('')||'<p>Aucun concurrent. Ajoute un vendeur ci-dessus.</p>';
+ if(!active){
+  competitors=[];
+  $('competitors').innerHTML='';
+  return;
+ }
+
+ let d=await api('/api/competitors?studyId='+encodeURIComponent(active.id));
+ competitors=d.competitors||[];
+
+ $('competitors').innerHTML=competitors.map(c=>
+  `<div class="result">
+   <strong>${esc(c.name)}</strong>
+   <span class="pill">${esc(c.status)}</span>
+   <p>${esc(c.url||'URL non renseignée')}</p>
+   ${c.data?.publicPage?`
+    <p class="ok">Page extraite : ${esc(c.data.publicPage.title||c.data.publicPage.url)} · ${esc(c.data.publicPage.collectedAt||'')}</p>
+    <p>${esc(c.data.publicPage.description||'')}</p>
+   `:''}
+   <div class="row">
+    <button onclick="collect('${esc(c.id)}')">Extraire / actualiser</button>
+    <a class="btn" href="bebe.html">Analyser dans Robot 2</a>
+   </div>
+  </div>`
+ ).join('')||'<p>Aucun concurrent. Lance la recherche automatique ou ajoute un vendeur ci-dessus.</p>';
 }
+
 $('create').onclick=async()=>{
  try{
-  let product=$('product').value.trim();if(!product)throw Error('Entre le nom du produit.');
+  let product=$('product').value.trim();
+
+  if(!product)throw Error('Entre le nom du produit.');
+
   let variants=$('variants').value.split(/\n|,/).map(x=>x.trim()).filter(Boolean);
-  let d=await api('/api/studies',{method:'POST',body:JSON.stringify({product,market:$('market').value.trim()||'Maroc',variants,keywords:makeKeywords(product,variants)})});
-  message('Étude créée dans la base partagée.','ok');await load(d.study.id);
- }catch(e){message(e.message,'error')}
+
+  let d=await api('/api/studies',{
+   method:'POST',
+   body:JSON.stringify({
+    product,
+    market:$('market').value.trim()||'Maroc',
+    variants,
+    keywords:makeKeywords(product,variants)
+   })
+  });
+
+  message('Étude créée dans la base partagée.','ok');
+  await load(d.study.id);
+
+ }catch(e){
+  message(e.message,'error');
+ }
 };
+
 $('reload').onclick=()=>load().catch(e=>message(e.message,'error'));
-$('study').onchange=()=>{active=studies.find(s=>s.id===$('study').value)||null;render();loadCompetitors().catch(e=>message(e.message,'error'))};
+
+$('study').onchange=()=>{
+ active=studies.find(s=>s.id===$('study').value)||null;
+ render();
+ loadCompetitors().catch(e=>message(e.message,'error'));
+};
+
+/* RECHERCHE AUTOMATIQUE AVEC SERPER */
+$('autoSearch').onclick=async()=>{
+ const button=$('autoSearch');
+
+ try{
+  if(!active){
+   throw Error('Crée ou sélectionne une étude avant de lancer la recherche.');
+  }
+
+  button.disabled=true;
+  autoMessage('Recherche automatique en cours…');
+
+  const result=await api('/api/auto',{
+   method:'POST',
+   body:JSON.stringify({studyId:active.id})
+  });
+
+  const added=Number(result.added)||0;
+  const withPage=Number(result.withPage)||0;
+  const names=Array.isArray(result.names)?result.names:[];
+  const queries=Array.isArray(result.queries)?result.queries:[];
+
+  let details=
+   'Recherche terminée. Concurrents ajoutés : '+added+
+   '. Pages accessibles : '+withPage+'.';
+
+  if(names.length){
+   details+=' Concurrents : '+names.join(', ')+'.';
+  }
+
+  if(queries.length){
+   details+=' Requêtes utilisées : '+queries.join(' · ')+'.';
+  }
+
+  autoMessage(details,'ok');
+
+  await loadCompetitors();
+
+ }catch(e){
+  autoMessage('Recherche automatique impossible : '+e.message,'error');
+
+ }finally{
+  button.disabled=false;
+ }
+};
+
+/* AJOUT MANUEL D'UN CONCURRENT */
 $('add').onclick=async()=>{
  try{
   if(!active)throw Error('Crée ou sélectionne une étude.');
-  let name=$('name').value.trim(),url=$('url').value.trim();
+
+  let name=$('name').value.trim();
+  let url=$('url').value.trim();
+
   if(!name)throw Error('Entre le nom du concurrent.');
-  if(url&&!/^https?:\/\//i.test(url))url='https://'+url;
-  let data={robot1:{stages:stages.map((title,i)=>({id:i+1,title,status:'A_VERIFIER',notes:''})),createdAt:new Date().toISOString()}};
-  await api('/api/competitors',{method:'POST',body:JSON.stringify({studyId:active.id,name,url,data})});
-  $('name').value='';$('url').value='';message('Concurrent ajouté. Il est maintenant visible dans Robot 2.','ok');await loadCompetitors();
- }catch(e){message(e.message,'error')}
+
+  if(url&&!/^https?:\/\//i.test(url)){
+   url='https://'+url;
+  }
+
+  let data={
+   robot1:{
+    stages:stages.map((title,i)=>({
+     id:i+1,
+     title,
+     status:'A_VERIFIER',
+     notes:''
+    })),
+    createdAt:new Date().toISOString()
+   }
+  };
+
+  await api('/api/competitors',{
+   method:'POST',
+   body:JSON.stringify({
+    studyId:active.id,
+    name,
+    url,
+    data
+   })
+  });
+
+  $('name').value='';
+  $('url').value='';
+
+  message('Concurrent ajouté. Vérifie sa présence dans Robot 2.','ok');
+
+  await loadCompetitors();
+
+ }catch(e){
+  message(e.message,'error');
+ }
 };
+
+/* EXTRACTION D'UNE PAGE PUBLIQUE */
 window.collect=async id=>{
  try{
-  let c=competitors.find(x=>x.id===id);if(!c?.url)throw Error('Ajoute une URL publique avant extraction.');
+  let c=competitors.find(x=>x.id===id);
+
+  if(!c?.url)throw Error('Ajoute une URL publique avant extraction.');
+
   message('Extraction de la page en cours…');
-  let d=await api('/api/collect',{method:'POST',body:JSON.stringify({url:c.url})});
-  await api('/api/competitors',{method:'PATCH',body:JSON.stringify({id,data:{...(c.data||{}),publicPage:d.result},status:'ESTIME'})});
-  message('Extraction terminée. Vérifie les informations sur la source.','ok');await loadCompetitors();
- }catch(e){message(e.message,'error')}
+
+  let d=await api('/api/collect',{
+   method:'POST',
+   body:JSON.stringify({url:c.url})
+  });
+
+  await api('/api/competitors',{
+   method:'PATCH',
+   body:JSON.stringify({
+    id,
+    data:{...(c.data||{}),publicPage:d.result},
+    status:'ESTIME'
+   })
+  });
+
+  message('Extraction terminée. Vérifie les informations sur la source.','ok');
+
+  await loadCompetitors();
+
+ }catch(e){
+  message(e.message,'error');
+ }
 };
-load().catch(e=>message('API non disponible : '+e.message+' — configure Cloudflare Pages, le binding D1 DB et le secret PACK_ACCESS_KEY.','error'));
+
+/* CHARGEMENT INITIAL */
+load().catch(e=>
+ message(
+  'API non disponible : '+e.message+
+  ' — Vérifie le déploiement Cloudflare Pages, le binding D1 DB et le secret PACK_ACCESS_KEY.',
+  'error'
+ )
+);
 </script>
 </body>
 </html>
